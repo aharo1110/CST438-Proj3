@@ -13,6 +13,11 @@ function Login() {
     console.log('Logging in with:', { username, password });
   };
 
+  const handleSignUp = () => {
+    navigate("/signup")
+  }
+
+
   return (
     <div className="App">
       <div className="logo-container">
@@ -22,7 +27,7 @@ function Login() {
       <div className="login-card">
         <div className="tabs">
           <div className="tab active">Login</div>
-          <div className="tab inactive">Sign Up</div>
+          <div className="tab inactive" onClick={handleSignUp}>Sign Up</div>
         </div>
         <form onSubmit={handleLogin} className="login-form">
           <input
@@ -48,5 +53,5 @@ function Login() {
     </div>
   );
 }
-
+//JB: probably create oath2 properties here, in a later time.
 export default Login;

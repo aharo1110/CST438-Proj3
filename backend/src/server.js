@@ -14,8 +14,29 @@ const morgan = require("morgan");
 
 const database = require("./database");
 
+const passport = require("passport");
+
 // Appi
 const app = express();
+
+require("./auth");
+
+const session = require("express-session");
+
+app.use(session({
+  secret: "your-session-secret",
+  resave: false,
+  saveUninitialized: false,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get()"/auth/login", passport.authenticate("oath2"));
+
+app.get("/auth/callback", passport.authenticate("oauth2", { failureRedirect: "/" }), (req, res) => {
+  res.redirect("/home");
+});
 
 app.use(morgan("common"));
 
@@ -34,3 +55,5 @@ app.get("/healthz", function(req, res) {
 });
 
 module.exports = app;
+
+//I need the url for the homepage in order to proceed or else I will get confused on implication(for now fix the .env file later and auth.js file).
