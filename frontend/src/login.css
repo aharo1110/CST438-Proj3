@@ -70,6 +70,7 @@ img {
 }
 
 .input-field {
+  width: 90%;
   padding: 1rem;
   border: none;
   background: #f5f5f5;

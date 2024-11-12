@@ -1,0 +1,210 @@
+/* Base styles */
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(180deg, #77bdff 75%, #93c4a6 100%);
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+/* Logo styles */
+.logo {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 2rem 0;
+    text-align: center;
+}
+
+img {
+    width: 40%;
+    height: auto;
+}
+
+/* Signup card styles */
+.signup-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 450px;
+    animation: slideUp 0.5s ease-out;
+}
+
+/* Section styles */
+.section-title {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 1.5rem 0 1rem;
+    font-weight: 600;
+}
+
+/* Tab styles */
+.tabs {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.tab {
+    font-size: 1.25rem;
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    color: #77bdff;
+    border-bottom: 2px solid #77bdff;
+}
+
+.tab.inactive {
+    color: #666;
+}
+
+.tab:hover {
+    color: #77bdff;
+}
+
+/* Form styles */
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.input-field {
+    width: 90%;
+    padding: 1rem;
+    border: none;
+    background: #f5f5f5;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    background: #eef;
+    box-shadow: 0 0 0 2px rgba(119, 189, 255, 0.2);
+}
+
+select.input-field {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+.input-field::placeholder {
+    color: #999;
+}
+
+/* Signup button */
+.signup-button {
+    width: 100%;
+    padding: 1rem;
+    background: #77bdff;
+    border: none;
+    border-radius: 2rem;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: 0.3s ease, transform 0.2s ease;
+}
+
+.signup-button:hover {
+    background: #6db96d;
+    transform: translateY(-1px);
+}
+
+.signup-button:active {
+    transform: translateY(0);
+}
+
+/* Animation keyframes */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Error state styles */
+.input-field.error {
+    background: #fff0f0;
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Loading state styles */
+.signup-button.loading {
+    background: #b8b8b8;
+    cursor: not-allowed;
+    position: relative;
+    overflow: hidden;
+}
+
+.signup-button.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    animation: loading 1.5s infinite;
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+    .signup-card {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .logo {
+        font-size: 2rem;
+        margin: 1.5rem 0;
+    }
+
+    .tab {
+        font-size: 1.1rem;
+    }
+
+    .input-field {
+        padding: 0.875rem;
+    }
+
+    .signup-button {
+        padding: 0.875rem;
+    }
+    
+    .section-title {
+        font-size: 1rem;
+    }
+}
