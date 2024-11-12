@@ -5,7 +5,7 @@ services:
       - NODE_ENV=development
       context: backend
       target: development
-    command: npm run start-watch
+    command: sh -c "npx knex migrate:latest --knexfile ./knexfile.js && npm run start-watch"
     environment:
       - DATABASE_DB=example
       - DATABASE_USER=root

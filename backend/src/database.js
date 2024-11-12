@@ -1,10 +1,7 @@
 const knex = require('knex');
-const { database } = require('./config');
+const config = require('../knexfile');
 
-module.exports = knex({
-  client: 'mysql2',
-  connection: database,
-  migrations: {
-    directory: './src/migrations'
-  }
-});
+const environment = process.env.NODE_ENV || 'development';
+const connection = knex(config[environment]);
+
+module.exports = connection;
