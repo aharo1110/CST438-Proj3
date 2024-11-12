@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background:#77bdff;
+  background: linear-gradient(180deg, #77bdff 75%, #93c4a6 100%);;
   font-family: Arial, sans-serif;
   padding: 20px;
 }
@@ -19,7 +19,7 @@
 }
 
 img {
-  width: 100%;
+  width: 40%;
   height: auto;
 }
 
@@ -30,7 +30,7 @@ img {
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   animation: slideUp 0.5s ease-out;
 }
 
@@ -106,7 +106,7 @@ img {
 .login-button {
   width: 100%;
   padding: 1rem;
-  background: #90EE90;
+  background: #77bdff;
   border: none;
   border-radius: 2rem;
   color: white;

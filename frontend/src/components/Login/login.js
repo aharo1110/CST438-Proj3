@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../login.css';
+import image from '../../images/FURCARE_logo.jpeg'
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -15,7 +16,7 @@ function Login() {
   return (
     <div className="App">
       <div className="logo-container">
-        <img src="/Users/saniyawairkar/Desktop/SEProject3/CST438-Proj3/frontend/src/images/FURCARE_logo.jpeg" alt="FurCare Logo" className="logo-image" />
+        <img src={image} alt="FurCare Logo" className="logo-image" />
         <div className="logo">FurCare</div>
       </div>
       <div className="login-card">
@@ -27,7 +28,7 @@ function Login() {
           <input
             type="text"
             className="input-field"
-            placeholder="Email address / Phone No. / Username"
+            placeholder="Email add. / Phone No. / Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
