@@ -1,20 +1,207 @@
+/* Base styles */
 .App {
-    text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:#77bdff;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Logo styles */
+.logo {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+/* Login card styles */
+.login-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Tab styles */
+.tabs {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.tab {
+  font-size: 1.25rem;
+  padding-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab.active {
+  color: #663399;
+  border-bottom: 2px solid #663399;
+}
+
+.tab.inactive {
+  color: #666;
+}
+
+.tab:hover {
+  color: #663399;
+}
+
+/* Form styles */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-field {
+  padding: 1rem;
+  border: none;
+  background: #f5f5f5;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  background: #eef;
+  box-shadow: 0 0 0 2px rgba(102, 51, 153, 0.2);
+}
+
+.input-field::placeholder {
+  color: #999;
+}
+
+/* Forgot password link */
+.forgot-password {
+  display: block;
+  text-align: center;
+  color: #666;
+  text-decoration: none;
+  margin: 1rem 0;
+  transition: color 0.3s ease;
+}
+
+.forgot-password:hover {
+  color: #663399;
+}
+
+/* Login button */
+.login-button {
+  width: 100%;
+  padding: 1rem;
+  background: #90EE90;
+  border: none;
+  border-radius: 2rem;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s ease, transform 0.2s ease;
+}
+
+.login-button:hover {
+  background: #7CCD7C;
+  transform: translateY(-1px);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+/* Animation keyframes */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .App-link {
-    color: #61dafb;
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1.5rem;
+    margin: 1rem;
   }
-  
+
+  .logo {
+    font-size: 2rem;
+    margin: 1.5rem 0;
+  }
+
+  .tab {
+    font-size: 1.1rem;
+  }
+
+  .input-field {
+    padding: 0.875rem;
+  }
+
+  .login-button {
+    padding: 0.875rem;
+  }
+}
+
+/* Error state styles */
+.input-field.error {
+  background: #fff0f0;
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Loading state styles */
+.login-button.loading {
+  background: #b8b8b8;
+  cursor: not-allowed;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-button.loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
