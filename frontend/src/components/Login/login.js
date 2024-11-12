@@ -17,7 +17,6 @@ function Login() {
     navigate("/signup")
   }
 
-
   return (
     <div className="App">
       <div className="logo-container">
