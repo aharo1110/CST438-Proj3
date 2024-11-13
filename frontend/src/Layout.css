@@ -1,0 +1,60 @@
+
+.layout-container {
+    width: 100%;
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Base styling */
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(180deg, #77bdff 75%, #93c4a6 100%);
+    font-family: Arial, sans-serif;
+}
+
+.layout-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    background-color: transparent;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.website-name {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0 1.5rem;
+}
+
+.layout-button {
+    background-color: #6db96d;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.layout-button:hover {
+    background-color: #7CCD7C;
+    transform: translateY(-1px);
+}
+
+.layout-button:active {
+    transform: translateY(0);
+}

@@ -4,7 +4,7 @@ import './App.css';
 //import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login/login';
-import Home from './components/home';
+import Home from './components/Home/home';
 import Signup from './components/Signup/signup';
 
 
