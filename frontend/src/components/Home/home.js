@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../Layout';
-import '../../home.css';
+import Layout from '../../Layout'
+import '../../css/home.css';
 import image from '../../images/FURCARE_logo.jpeg';
 
 
@@ -21,7 +21,7 @@ function Home() {
         <div className="home-buttons">
           <button onClick={() => navigate('/pets')} className="home-button">My Pets</button>
           <button onClick={() => navigate('/services')} className="home-button">Browse Services</button>
-          <button onClick={() => navigate('/services')} className="home-button">Book A Service</button>
+          <button onClick={() => navigate('/book')} className="home-button">Book A Service</button>
         </div>
 
         <section className="appointments-section">
