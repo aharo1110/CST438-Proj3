@@ -45,10 +45,21 @@ function Signup() {
   // Handle owner details changes
   const handleOwnerChange = (e) => {
     const { name, value } = e.target;
-    setOwnerDetails(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Special handling for phone number
+    if (name === 'phone') {
+      const numbersOnly = value.replace(/[^0-9]/g, '');
+      setOwnerDetails(prev => ({
+        ...prev,
+        [name]: numbersOnly
+      }));
+    } else {
+      // Handle other owner details normally
+      setOwnerDetails(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   // Handle credentials changes
@@ -73,7 +84,14 @@ function Signup() {
 
     // Validate Owner Details
     if (!ownerDetails.name) newErrors.ownerName = 'Owner name is required';
-    if (!ownerDetails.phone) newErrors.phone = 'Phone number is required';
+    if (!ownerDetails.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else if (ownerDetails.phone.length !== 10) {
+      newErrors.phone = 'Phone number must be 10 digits';
+    } else if (!/^[0-9]{10}$/.test(ownerDetails.phone)) {
+      newErrors.phone = 'Invalid phone number format';
+    }
+    
     if (!ownerDetails.email) newErrors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(ownerDetails.email)) {
       newErrors.email = 'Invalid email format';
@@ -146,6 +164,8 @@ function Signup() {
               <option value="">Select Pet Type</option>
               <option value="dog">Dog</option>
               <option value="cat">Cat</option>
+              <option value="hamster">Hamster</option>
+              <option value="bird">Bird</option>
               <option value="other">Other</option>
             </select>
             {errors.petType && <div className="error-message">{errors.petType}</div>}
@@ -177,6 +197,7 @@ function Signup() {
           <div className="form-group">
             <input
               type="date"
+              placeholder="Date of birth"
               name="dateOfBirth"
               className={`input-field ${errors.dateOfBirth ? 'error' : ''}`}
               value={petDetails.dateOfBirth}
@@ -205,6 +226,14 @@ function Signup() {
               placeholder="Phone Number"
               value={ownerDetails.phone}
               onChange={handleOwnerChange}
+              onKeyPress={(e) => {
+                if (!/[0-9]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              maxLength={10}
+              pattern="[0-9]*"
+              inputMode="numeric"
             />
             {errors.phone && <div className="error-message">{errors.phone}</div>}
           </div>
@@ -261,9 +290,9 @@ function Signup() {
             type="submit" 
             className={`signup-button ${isLoading ? 'loading' : ''}`}
             disabled={isLoading}
-         >
+          >
             {isLoading ? 'Signing up...' : 'Sign Up'}
-         </button>
+          </button>
         </form>
       </div>
     </div>

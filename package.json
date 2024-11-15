@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "lucide-react": "^0.456.0",
+    "react-datepicker": "^7.5.0",
     "react-router-dom": "^6.27.0"
   }
 }

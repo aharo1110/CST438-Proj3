@@ -12,11 +12,20 @@
 /* Logo styles */
 .logo {
   color: white;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
-  margin: 2rem 0;
+  margin: auto;
   text-align: center;
 }
+
+.sublogo {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
+}
+
 
 img {
   width: 40%;
@@ -143,10 +152,18 @@ img {
     padding: 1.5rem;
     margin: 1rem;
   }
+  .sublogo {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    text-align: center;
+  }
 
   .logo {
     font-size: 2rem;
-    margin: 1.5rem 0;
+    margin: auto;
+    text-align: center;
   }
 
   .tab {
