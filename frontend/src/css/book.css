@@ -1,0 +1,53 @@
+/* Book page container with consistent screen margin */
+.book-container {
+    width: 100%;
+    max-width: 1200px; /* Fixed maximum width */
+    margin: 0 auto; /* Centered horizontally */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Main content area with padding to fit below the fixed header */
+.main-content {
+    padding-top: 6rem; /* Adjust for fixed header height */
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Book header styling */
+.book-header h1 {
+    color: #ffffff;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+/* Booking options container */
+.booking-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    margin: 20px 0;
+}
+
+/* Button styles specific to the Book page */
+.booking-button {
+    padding: 1rem 2rem;
+    background-color: #133351;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 200px;
+    width: 100%;
+}
+
+.booking-button:hover {
+    background-color: #6db96d;
+}
