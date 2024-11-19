@@ -8,6 +8,7 @@ import Home from './components/Home/home';
 import Signup from './components/Signup/signup';
 import Health from './components/Health/health';
 import Book from './components/Book/book';
+import Location from './components/Location/location';
 
 
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/health"element={<Health/>} />
           <Route path="/book" element={<Book />} />
+          <Route path="/location" element={<Location />} />
             
         </Routes>
       </Router>
