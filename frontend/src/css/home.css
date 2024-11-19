@@ -1,0 +1,85 @@
+
+.home-container {
+    width: 100%;
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-content {
+    padding-top: 6rem; 
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 20px;
+}
+
+.home-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.home-header h1 {
+    color: #ffffff;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.home-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+.home-button {
+    padding: 1rem 2rem;
+    background-color: #133351;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 200px;
+}
+
+.home-button:hover {
+    background-color: #6db96d;
+}
+
+.appointments-section {
+    width: 100%;
+    max-width: 600px;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    text-align: left;
+}
+
+.appointments-section h2 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.appointments-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.appointments-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.appointments-list li:last-child {
+    border-bottom: none;
+}
