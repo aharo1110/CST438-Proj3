@@ -8,6 +8,9 @@ exports.up = function(knex) {
           return knex.schema.createTable('users', function (t) {
             t.increments('user_id').primary();
             t.string('username', 60);
+            t.string('display_name', 60);
+            t.integer('phone', 10);
+            t.string('email', 60);
             t.string('password', 60);
             t.boolean('is_admin').defaultTo(false);
           });
