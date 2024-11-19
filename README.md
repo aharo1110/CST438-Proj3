@@ -15,6 +15,10 @@ This project is meant to run completely and totally within Docker.
 To do so, make sure Docker is running on your machine,
 and that you have all the requisite tools.
 
+On a first run, or after making any changes, run `rebuild.sh` or `rebuild.ps1`
+depending on the type of machine you're using. These will build the container
+according to the latest changes and run it.
+
 Run `docker-compose up`, or `docker-compose up -d` to not see logs.
 The containers will all run simultaneously, notwithstanding any bugs.
 

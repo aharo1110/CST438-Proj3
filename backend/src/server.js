@@ -68,6 +68,8 @@ app.get("/", function(req, res, next) {
     .catch(next);
 });
 
+// Insert API endpoints here ???
+
 app.get("/healthz", function(req, res) {
   // do app logic here to determine if app is truly healthy
   // you should return 200 if healthy, and anything else will fail

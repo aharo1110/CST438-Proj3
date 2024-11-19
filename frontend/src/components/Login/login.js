@@ -34,12 +34,13 @@ function Login() {
     navigate("/signup")
   };
 
-
   return (
     <div className="App">
       <div className="logo-container">
         <img src={image} alt="FurCare Logo" className="logo-image" />
+        <div className="sublogo">Welcome To</div>
         <div className="logo">FurCare</div>
+
       </div>
       <div className="login-card">
         <div className="tabs">
