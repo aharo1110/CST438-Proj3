@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../../login.css';
 import image from '../../images/FURCARE_logo.jpeg'
 
@@ -8,14 +9,30 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     console.log('Logging in with:', { username, password });
-  };
+
+  try {
+    const response = await axios.post('http://localhost:5000/api/login', {
+      username: username,
+      password: password,
+    });
+
+    if (response.status === 200) {
+      
+      localStorage.setItem('authToken', response.data.token);
+      navigate('/home');
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+    alert('Invalid username or password');
+  }
+};
 
   const handleSignUp = () => {
     navigate("/signup")
-  }
+  };
 
   return (
     <div className="App">
