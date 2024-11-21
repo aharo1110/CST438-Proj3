@@ -23,6 +23,7 @@ function Location() {
         const { lat, lng } = data.results[0].geometry.location;
 
         console.log('Geocoded Location:', { lat, lng });
+        window.alert(`Latitude: ${lat}, Longitude: ${lng}`);
         navigate('/book', { state: { lat, lng, userLocation } }); // pass location data
       } else {
         setError('Could not find the location. Please try again.');
