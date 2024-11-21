@@ -1,8 +1,8 @@
 
 .location-container {
     width: 100%;
-    max-width: 1200px; /* Same max-width as other pages */
-    margin: 0 auto; /* Center horizontally */
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
     display: flex;
     flex-direction: column;
