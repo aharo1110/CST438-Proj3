@@ -50,7 +50,7 @@ services:
       - 3000:3000
     volumes:
       - ./frontend/src:/code/src
-      - /code/node_modules
+      - ./frontend/node_modules:/code/node_modules
     networks:
       - public
     depends_on:

@@ -65,7 +65,7 @@ function Login() {
             required
           />
           <a href="#" className="forgot-password">Forget Password?</a>
-          <button type="submit" className="login-button">Login</button>
+          <button type="submit" className="login-button" onClick={() => navigate('/home')}>Login</button>
         </form>
         <div className="google-login">
           <a href="http://localhost:5000/auth/google">
