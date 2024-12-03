@@ -15,29 +15,33 @@ const morgan = require("morgan");
 const database = require("./database");
 
 const passport = require("passport");
+require('dotenv').config();
+
+console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
 
 const cors = require("cors");
-
-// Appi
+const session = require("express-session");
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(express.json());
 
 require("./auth");
 
-const session = require("express-session");
 const knex = require("knex");
 
 app.use(express.json());
 
 app.use(session({
-  secret: "your-session-secret",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(morgan("common"));
 
 const users = [{username:  "test1", password:  "password1"}];
 
@@ -56,13 +60,16 @@ app.post("/api/auth/login", (req, res) => {
   }
 });
 
-app.get("/api/auth/login", passport.authenticate("oauth2"));
 
-app.get("/api/auth/callback", passport.authenticate("oauth2", { failureRedirect: "/" }), (req, res) => {
-  res.redirect("/home");
-});
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/home');
+  }
+);
 
-app.use(morgan("common"));
+
 
 app.get("/", function(req, res, next) {
   database.raw('select VERSION() version')
@@ -149,4 +156,4 @@ app.listen(PORT, () => {
 
 module.exports = app;
 
-//I need the url for the homepage in order to proceed or else I will get confused on implication(for now fix the .env file later and auth.js file).
+//I need the url for the homepage in order to proceed or else I will get confused on implication(for now fix the .env file later and auth.js file). */
