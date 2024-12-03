@@ -67,6 +67,13 @@ function Login() {
           <a href="#" className="forgot-password">Forget Password?</a>
           <button type="submit" className="login-button">Login</button>
         </form>
+        <div className="google-login">
+          <a href="http://localhost:5000/auth/google">
+            <button className="google-button">
+              Sign in with Google
+            </button>
+          </a>
+        </div>
       </div>
     </div>
   );
