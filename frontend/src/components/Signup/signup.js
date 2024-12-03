@@ -5,7 +5,7 @@ import image from '../../images/FURCARE_logo.jpeg';
 
 function Signup() {
   const navigate = useNavigate();
-  
+
   // State for Pet's Details
   const [petDetails, setPetDetails] = useState({
     name: '',
@@ -285,7 +285,7 @@ function Signup() {
           </div>
 
           {errors.submit && <div className="error-message">{errors.submit}</div>}
-          
+
           <button 
             type="submit" 
             className={`signup-button ${isLoading ? 'loading' : ''}`}
@@ -298,5 +298,6 @@ function Signup() {
     </div>
   );
 }
+
 
 export default Signup;
