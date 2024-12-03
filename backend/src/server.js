@@ -26,6 +26,7 @@ app.use(cors());
 require("./auth");
 
 const session = require("express-session");
+const knex = require("knex");
 
 app.use(express.json());
 
@@ -40,7 +41,7 @@ app.use(passport.session());
 
 const users = [{username:  "test1", password:  "password1"}];
 
-app.post("/api/login", (req, res) => {
+app.post("/api/auth/login", (req, res) => {
   const { username, password } = req.body;
   // Update to conform to following criteria:
   // -- Check if username OR email OR phone
@@ -55,9 +56,9 @@ app.post("/api/login", (req, res) => {
   }
 });
 
-app.get("/auth/login", passport.authenticate("oauth2"));
+app.get("/api/auth/login", passport.authenticate("oauth2"));
 
-app.get("/auth/callback", passport.authenticate("oauth2", { failureRedirect: "/" }), (req, res) => {
+app.get("/api/auth/callback", passport.authenticate("oauth2", { failureRedirect: "/" }), (req, res) => {
   res.redirect("/home");
 });
 
@@ -72,7 +73,7 @@ app.get("/", function(req, res, next) {
 
 // Insert API endpoints here ???
 
-app.post("/auth/signup", (req, res) => {
+app.post("/api/auth/signup", (req, res) => {
   const {username, password,
     email, phone, owner_name,
     pet_name, pet_type, pet_breed, pet_sex, pet_dob} = req.body;
@@ -98,6 +99,35 @@ app.post("/auth/signup", (req, res) => {
       })
     });
     res.status(200).json({ message: "Signup successful" });
+});
+
+app.post("/api/pet", (req, res) => {
+  const {owner, name, type, breed, sex, dob} = req.body;
+  // Maybe check if owner exists?
+  // And if session is authenticated
+  knex('pets').insert({
+    owner: owner,
+    name: name,
+    type: type,
+    breed: breed,
+    sex: sex,
+    dob: dob
+  })
+  .then(() => {
+    res.status(200).json({ message: "Pet added" });
+  });
+});
+
+app.get("/api/pet", (req, res) => {
+  
+  knex('pets')
+  .where({'pet_id': req.query.id})
+  .select('*');
+  
+  // error handling
+
+  // return JSON
+
 });
 
 
