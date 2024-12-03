@@ -10,6 +10,8 @@ function Health() {
     nextVisit: '',
     lastWeightCheck: '',
     totalOperations: '',
+    doctorName: '',
+    phone: '',
   });
 
   const [vaccinationRecords, setVaccinationRecords] = useState([]);
@@ -20,16 +22,24 @@ function Health() {
   const [newAllergy, setNewAllergy] = useState('');
   const [showAddAllergyForm, setShowAddAllergyForm] = useState(false);
 
-  // Handler for date inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setPetDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+    if (name === 'phone') {
+      // Only allow numeric input for the phone field
+      if (!isNaN(value) || value === '') {
+        setPetDetails((prevDetails) => ({
+          ...prevDetails,
+          [name]: value,
+        }));
+      }
+    } else {
+      setPetDetails((prevDetails) => ({
+        ...prevDetails,
+        [name]: value,
+      }));
+    }
   };
 
-  // Handler for numeric inputs
   const handleNumericInputChange = (e) => {
     const { name, value } = e.target;
     if (!isNaN(value)) {
@@ -40,7 +50,6 @@ function Health() {
     }
   };
 
-  // Handlers for vaccination records
   const handleAddRecord = () => {
     if (newRecord.date && newRecord.type) {
       setVaccinationRecords([...vaccinationRecords, newRecord]);
@@ -50,12 +59,11 @@ function Health() {
   };
 
   const handleDeleteRecord = (index) => {
-    setVaccinationRecords((prevRecords) => 
+    setVaccinationRecords((prevRecords) =>
       prevRecords.filter((_, i) => i !== index)
     );
   };
 
-  // Handlers for food allergies
   const handleAddAllergy = () => {
     if (newAllergy) {
       setFoodAllergies([...foodAllergies, newAllergy]);
@@ -65,7 +73,7 @@ function Health() {
   };
 
   const handleDeleteAllergy = (index) => {
-    setFoodAllergies((prevAllergies) => 
+    setFoodAllergies((prevAllergies) =>
       prevAllergies.filter((_, i) => i !== index)
     );
   };
@@ -74,8 +82,20 @@ function Health() {
     <div className="App">
       <div className="header">
         <div className="contact-info">
-          <input type="text" name="doctorName" value="doctors name : need to add user input" readOnly />
-          <input type="tel" name="phone" value="doctors number : need to add user input" readOnly />
+          <input
+            type="text"
+            name="doctorName"
+            value={petDetails.doctorName}
+            onChange={handleInputChange}
+            placeholder="Doctor's Name"
+          />
+          <input
+            type="tel"
+            name="phone"
+            value={petDetails.phone}
+            onChange={handleInputChange}
+            placeholder="Doctor's Number"
+          />
         </div>
       </div>
 
@@ -85,7 +105,7 @@ function Health() {
           <h2>Pet Information</h2>
           <div className="info-grid">
             <div className="info-card">
-              <div className="info-label">Last visited day</div>
+              <div className="info-label">Last Vet Visit</div>
               <div className="info-value">
                 <span className="icon">📅</span>
                 <input
@@ -97,7 +117,7 @@ function Health() {
               </div>
             </div>
             <div className="info-card">
-              <div className="info-label">Next Visit</div>
+              <div className="info-label">Next Vet Visit</div>
               <div className="info-value">
                 <span className="icon">📅</span>
                 <input
