@@ -5,83 +5,83 @@
     align-items: center;
     font-family: Arial, sans-serif;
     color: #0f0052;
-}
+  }
   
-.header {
+  .header {
     width: 100%;
     padding: 1rem;
     background-color: #0077b6;
     color: white;
     display: flex;
     justify-content: center;
-}
+  }
   
-.contact-info input {
-    background: none;
+  .contact-info input {
     border: none;
     color: white;
     font-weight: bold;
     text-align: center;
     padding: 0.5rem;
     margin: 0 0.5rem;
-}
+    width: 200px;
+  }
   
-/* Content */
-.content {
+  /* Content */
+  .content {
     width: 90%;
     max-width: 600px;
     margin-top: 3.5rem;
-}
+  }
   
-.section {
+  .section {
     background-color: #ffffff;
     border-radius: 10px;
     padding: 2rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+  }
   
-.section-header {
+  .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-}
+  }
   
-.section-title {
+  .section-title {
     font-size: x-large;
     color: #000000;
     font-weight: bold;
-}
+  }
   
-.info-grid {
+  .info-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-}
+  }
   
-.info-card {
+  .info-card {
     display: flex;
     flex-direction: column;
-}
+  }
   
-.info-label {
+  .info-label {
     font-weight: bold;
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
     color: #0c0032;
-}
+  }
   
-.info-value {
+  .info-value {
     padding: 0.5rem;
     border: 1px solid #007c7c;
     border-radius: 5px;
     font-size: 0.9rem;
     background-color: #fff;
-}
+  }
   
-/* Button Styles */
-.add-button {
+  /* Button Styles */
+  .add-button {
     background-color: #004a72;
     color: white;
     font-size: 1.2rem;
@@ -90,13 +90,13 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
+  }
   
-.add-button:hover {
+  .add-button:hover {
     background-color: #74c3e5;
-}
+  }
   
-.delete-button {
+  .delete-button {
     background-color: #dc3545;
     color: white;
     font-size: 0.8rem;
@@ -106,34 +106,34 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-left: auto; /* Added to push button to right */
-}
+  }
   
-.delete-button:hover {
+  .delete-button:hover {
     background-color: #c82333;
-}
+  }
   
-/* Form Styles */
-.add-record-form, .add-allergy-form {
+  /* Form Styles */
+  .add-record-form, .add-allergy-form {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
-}
+  }
   
-.add-record-form input, .add-allergy-form input {
+  .add-record-form input, .add-allergy-form input {
     padding: 0.5rem;
     border: 1px solid #063f68;
     border-radius: 5px;
     flex: 1;
-}
+  }
   
-/* List Styles */
-.vaccination-list, .allergy-list {
+  /* List Styles */
+  .vaccination-list, .allergy-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-}
+  }
   
-.vaccination-item, .allergy-item {
+  .vaccination-item, .allergy-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -141,111 +141,121 @@
     background-color: #e3f2fd;
     border-radius: 5px;
     position: relative; /* Added for absolute positioning context */
-}
+  }
   
-.icon {
+  .icon {
     margin-right: 0.5rem;
-}
-
-.vaccination-date {
+  }
+  
+  .vaccination-date {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     color: #666;
     font-size: 12px;
-}
-
-/* Responsive styles */
-@media (max-width: 480px) {
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 480px) {
     /* Styles for the Health component */
     .vet-card {
-        padding: 60px;
+      padding: 60px;
     }
     .info-grid {
-        grid-template-columns: 1fr;
-        gap: 0rem;
+      grid-template-columns: 1fr;
+      gap: 0rem;
     }
   
-    /* Additional responsive styles for Health component */
-    .header {
-        text-align: center;
-        padding: 1rem;
-    }
-    
-    .contact-info {
+    .content {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        gap: 1.5rem;
+      }
+    /* Additional responsive styles for Health component */
+    .header {
+      text-align: center;
+      padding: 1rem;
     }
-    
+  
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .contact-info input {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+  
     .section {
-        padding: 1rem;
+      padding: 1rem;
     }
   
     .section-title {
-        font-size: 1.5rem;
-        text-align: start;
+      font-size: 1.5rem;
+      text-align: start;
     }
-    
+  
     .info-card {
-        padding: 1rem;
+      padding: 1rem;
     }
-    
+  
     .info-label, .info-value {
-        font-size: 1rem;
-        text-align: center;
-        padding: 0.7rem;
+      font-size: 1rem;
+      text-align: center;
+      padding: 0.7rem;
     }
-    
+  
     .add-button {
-        font-size: 1.2rem;
-        padding: 0.5rem;
-        margin-top: 0.5rem;
-        display: flex;
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      display: flex;
     }
-
+  
     .info-value input {
-        padding: 0.5rem;
-        border: 1px solid #007c7c;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        background-color: #fff;
-        text-align: center;
+      padding: 0.5rem;
+      border: 1px solid #007c7c;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      background-color: #fff;
+      text-align: center;
     }
-
+  
     .add-record-form, .add-allergy-form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
     }
   
     .add-record-form input,
     .add-allergy-form input {
-        width: 100%;
-        border: 1px solid #007c7c;
-        border-radius: 5px;
-        padding: 0.875rem;
-        margin: 0.5rem 0;
+      width: 100%;
+      border: 1px solid #007c7c;
+      border-radius: 5px;
+      padding: 0.875rem;
+      margin: 0.5rem 0;
     }
   
     .vaccination-item, .allergy-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: stretch;
-        font-size: 1rem;
-        position: relative; /* Maintain positioning context in mobile */
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      font-size: 1rem;
+      position: relative; /* Maintain positioning context in mobile */
     }
-
+  
     .vaccination-date {
-        color: #666;
-        font-size: 12px;
-        left: 76%;
-        transform: translateX(-125%);
+      color: #666;
+      font-size: 12px;
+      left: 76%;
+      transform: translateX(-125%);
     }
   
     .delete-button {
-        font-size: 1rem;
-        margin-left: auto; /* Maintain right alignment in mobile */
+      font-size: 1rem;
+      margin-left: auto; /* Maintain right alignment in mobile */
     }
-}
+  }
