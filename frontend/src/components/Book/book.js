@@ -14,11 +14,14 @@ function Book() {
           <header className="book-header">
             <h1>Book a Service</h1>
           </header>
-          
           <div className="booking-options">
             <h2>Please select a service:</h2>
-            <button onClick={() => navigate('/book/petsitting')} className="booking-button">Petsitting</button>
-            <button onClick={() => navigate('/book/maintenance')} className="booking-button">Maintenance Care</button>
+            <button onClick={() => navigate('/petsitting')} className="booking-button">
+              Petsitting
+            </button>
+            <button onClick={() => navigate('/maintenance')} className="booking-button">
+              Maintenance Care
+            </button>
           </div>
         </div>
       </div>
