@@ -11,7 +11,7 @@ exports.up = function(knex) {
             t.string('display_name', 60);
             t.integer('phone', 10);
             t.string('email', 60);
-            t.string('password', 60);
+            t.string('google_id', 60);
             t.boolean('is_admin').defaultTo(false);
           });
         }
