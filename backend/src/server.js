@@ -17,7 +17,7 @@ const database = require("./database");
 const passport = require("passport");
 require('dotenv').config();
 
-console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
+// console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
 
 const cors = require("cors");
 const session = require("express-session");
@@ -65,7 +65,7 @@ app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'em
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('/home');
+    res.redirect('http://localhost:3000/home');
   }
 );
 
