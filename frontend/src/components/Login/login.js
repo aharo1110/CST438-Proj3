@@ -14,7 +14,7 @@ function Login() {
     console.log('Logging in with:', { username, password });
 
   try {
-    const response = await axios.post('http://localhost:5000/api/login', {
+    const response = await axios.post('http://localhost:80/api/login', {
       username: username,
       password: password,
     });
@@ -68,7 +68,7 @@ function Login() {
           <button type="submit" className="login-button" onClick={() => navigate('/home')}>Login</button>
         </form>
         <div className="google-login">
-          <a href="http://localhost:5000/auth/google">
+          <a href="http://localhost:80/auth/google">
             <button className="google-button">
               Sign in with Google
             </button>
