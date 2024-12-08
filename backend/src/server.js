@@ -17,10 +17,10 @@ const database = require("./database");
 const passport = require("passport");
 require('dotenv').config();
 
-// console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
-
 const cors = require("cors");
 const session = require("express-session");
+
+// Appi
 const app = express();
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
@@ -43,33 +43,15 @@ app.use(passport.session());
 
 app.use(morgan("common"));
 
-const users = [{username:  "test1", password:  "password1"}];
+// OAuth endpoints
 
-app.post("/api/auth/login", (req, res) => {
-  const { username, password } = req.body;
-  // Update to conform to following criteria:
-  // -- Check if username OR email OR phone
-  // -- OAuth??
-  const user = users.find(u => u.username === username && u.password === password);
-  
-  if (user) {
-    req.session.user = user;
-    res.status(200).json({ message: "Login successful", token: "fake_token" });
-  } else {
-    res.status(401).json({ message: "Invalid credentials" });
-  }
-});
-
-
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', 
+app.get('/api/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/api/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     res.redirect('http://localhost:3000/home');
   }
 );
-
-
 
 app.get("/", function(req, res, next) {
   database.raw('select VERSION() version')
@@ -78,7 +60,7 @@ app.get("/", function(req, res, next) {
     .catch(next);
 });
 
-// Insert API endpoints here ???
+// API endpoints
 
 app.post("/api/auth/signup", (req, res) => {
   const {username, password,
@@ -137,9 +119,6 @@ app.get("/api/pet", (req, res) => {
 
 });
 
-
-
-
 // Health checks/System stuff
 
 app.get("/healthz", function(req, res) {
@@ -149,11 +128,4 @@ app.get("/healthz", function(req, res) {
   res.send("I am happy and healthy\n");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
 module.exports = app;
-
-//I need the url for the homepage in order to proceed or else I will get confused on implication(for now fix the .env file later and auth.js file). */
