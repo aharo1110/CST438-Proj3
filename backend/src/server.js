@@ -76,32 +76,37 @@ app.get("/api/auth/signup"), (req, res) => {
   }
 }
 
-app.post("/api/auth/signup", (req, res) => {
-  const {username, password,
-    email, phone, owner_name,
+app.post("/api/auth/signup", async (req, res) => {
+  const {google_id, phone,
     pet_name, pet_type, pet_breed, pet_sex, pet_dob} = req.body;
-    // Don't implement on frontend until OAuth implemented
-    // ie: when doing so return a variable fed into DB!!
-    // (or however that works)
+    try {
+      // Update user values
+      await knex('users')
+        .where({ google_id: google_id })
+        .update({ phone: phone });
+  
+      const user = await knex('users')
+        .where({ google_id: google_id })
+        .select('user_id')
+        .first();
 
-    // Add fields to corresponding tables
-    knex('users').insert({
-      username: username,
-      password: password,
-      email: email,
-      phone: phone,
-      display_name: owner_name
-    }).then((user_id) => {
-      knex('pets').insert({
+      const user_id = user.user_id;
+  
+      // Insert pet values
+      await knex('pets').insert({
         owner: user_id,
         name: pet_name,
         type: pet_type,
         breed: pet_breed,
         sex: pet_sex,
         dob: pet_dob
-      })
-    });
-    res.status(200).json({ message: "Signup successful" });
+      });
+  
+      res.status(200).json({ message: "Signup successful" });
+    } catch (error) {
+      console.error('Signup error:', error);
+      res.status(500).json({ message: "Failed to create account. Please try again." });
+    }
 });
 
 app.post("/api/pet", (req, res) => {
