@@ -17,10 +17,10 @@ const database = require("./database");
 const passport = require("passport");
 require('dotenv').config();
 
-// console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
-
 const cors = require("cors");
 const session = require("express-session");
+
+// Appi
 const app = express();
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
@@ -28,7 +28,8 @@ app.use(express.json());
 
 require("./auth");
 
-const knex = require("knex");
+const knex = require("./database");
+const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 
@@ -36,6 +37,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
 app.use(passport.initialize());
@@ -43,33 +45,22 @@ app.use(passport.session());
 
 app.use(morgan("common"));
 
-const users = [{username:  "test1", password:  "password1"}];
+// OAuth endpoints
 
-app.post("/api/auth/login", (req, res) => {
-  const { username, password } = req.body;
-  // Update to conform to following criteria:
-  // -- Check if username OR email OR phone
-  // -- OAuth??
-  const user = users.find(u => u.username === username && u.password === password);
-  
-  if (user) {
-    req.session.user = user;
-    res.status(200).json({ message: "Login successful", token: "fake_token" });
-  } else {
-    res.status(401).json({ message: "Invalid credentials" });
-  }
-});
-
-
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', 
+app.get('/api/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/api/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('http://localhost:3000/home');
+    const { profile, isNew } = req.user;
+    const token = jwt.sign({ profile, isNew }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    if(isNew){
+      req.session.newUser = profile;
+      res.redirect(`http://localhost:3000/signup?token=${token}`);
+    } else {
+      res.redirect('http://localhost:3000/home');
+    }
   }
 );
-
-
 
 app.get("/", function(req, res, next) {
   database.raw('select VERSION() version')
@@ -78,34 +69,54 @@ app.get("/", function(req, res, next) {
     .catch(next);
 });
 
-// Insert API endpoints here ???
+// API endpoints
 
-app.post("/api/auth/signup", (req, res) => {
-  const {username, password,
-    email, phone, owner_name,
+app.get("/api/auth/signup", (req, res) => {
+  const token = req.query.token;
+  console.log(token);
+  if (!token) {
+    return res.status(401).json({ message: 'Token is missing' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json(decoded.profile);
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+});
+
+app.post("/api/auth/signup", async (req, res) => {
+  const {google_id, phone,
     pet_name, pet_type, pet_breed, pet_sex, pet_dob} = req.body;
-    // Don't implement on frontend until OAuth implemented
-    // ie: when doing so return a variable fed into DB!!
-    // (or however that works)
+    try {
+      // Update user values
+      await knex('users')
+        .where({ google_id: google_id })
+        .update({ phone: phone });
+  
+      const user = await knex('users')
+        .where({ google_id: google_id })
+        .select('user_id')
+        .first();
 
-    // Add fields to corresponding tables
-    knex('users').insert({
-      username: username,
-      password: password,
-      email: email,
-      phone: phone,
-      display_name: owner_name
-    }).then((user_id) => {
-      knex('pets').insert({
+      const user_id = user.user_id;
+  
+      // Insert pet values
+      await knex('pets').insert({
         owner: user_id,
         name: pet_name,
         type: pet_type,
         breed: pet_breed,
         sex: pet_sex,
         dob: pet_dob
-      })
-    });
-    res.status(200).json({ message: "Signup successful" });
+      });
+  
+      res.status(200).json({ message: "Signup successful" });
+    } catch (error) {
+      console.error('Signup error:', error);
+      res.status(500).json({ message: "Failed to create account. Please try again." });
+    }
 });
 
 app.post("/api/pet", (req, res) => {
@@ -137,9 +148,6 @@ app.get("/api/pet", (req, res) => {
 
 });
 
-
-
-
 // Health checks/System stuff
 
 app.get("/healthz", function(req, res) {
@@ -149,11 +157,4 @@ app.get("/healthz", function(req, res) {
   res.send("I am happy and healthy\n");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
 module.exports = app;
-
-//I need the url for the homepage in order to proceed or else I will get confused on implication(for now fix the .env file later and auth.js file). */
