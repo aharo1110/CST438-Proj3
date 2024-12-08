@@ -45,7 +45,7 @@ function Login() {
       <div className="login-card">
         <div className="google-login">
           <a href="http://localhost:80/api/auth/google">
-            <button type="submit" className="login-button">
+            <button className="login-button">
               Sign in with Google
             </button>
           </a>
