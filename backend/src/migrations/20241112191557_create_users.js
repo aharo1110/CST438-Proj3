@@ -9,7 +9,7 @@ exports.up = function(knex) {
             t.increments('user_id').primary();
             t.string('username', 60);
             t.string('display_name', 60);
-            t.integer('phone', 10);
+            t.string('phone', 10);
             t.string('email', 60);
             t.string('google_id', 60);
             t.boolean('is_admin').defaultTo(false);

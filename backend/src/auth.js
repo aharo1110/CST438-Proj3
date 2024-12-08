@@ -1,4 +1,5 @@
 const passport = require("passport");
+const knex = require('./database');
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 passport.use(

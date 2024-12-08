@@ -28,7 +28,8 @@ app.use(express.json());
 
 require("./auth");
 
-const knex = require("knex");
+const knex = require("./database");
+const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 
@@ -36,6 +37,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
 app.use(passport.initialize());
@@ -50,9 +52,10 @@ app.get('/api/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     const { profile, isNew } = req.user;
+    const token = jwt.sign({ profile, isNew }, process.env.JWT_SECRET, { expiresIn: '1h' });
     if(isNew){
       req.session.newUser = profile;
-      res.redirect('http://localhost:3000/signup');
+      res.redirect(`http://localhost:3000/signup?token=${token}`);
     } else {
       res.redirect('http://localhost:3000/home');
     }
@@ -68,13 +71,20 @@ app.get("/", function(req, res, next) {
 
 // API endpoints
 
-app.get("/api/auth/signup"), (req, res) => {
-  if(req.session.newUser){
-    res.json(req.session.newUser);
-  } else {
-    res.status(404).json({ message: 'Not a new user'});
+app.get("/api/auth/signup", (req, res) => {
+  const token = req.query.token;
+  console.log(token);
+  if (!token) {
+    return res.status(401).json({ message: 'Token is missing' });
   }
-}
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json(decoded.profile);
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+});
 
 app.post("/api/auth/signup", async (req, res) => {
   const {google_id, phone,

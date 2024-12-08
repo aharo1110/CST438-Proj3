@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../../signup.css';
 import image from '../../images/FURCARE_logo.jpeg';
 
@@ -7,22 +8,30 @@ function Signup() {
   const navigate = useNavigate();
   const [newUser, setNewUser] = useState(null);
 
-  useEffect(() => {
-    const fetchNewUser = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/auth/signup');
-        setNewUser(response.data);
-      } catch (error) {
-        console.error('Error fetching new user data:', error);
-      }
-    };
+  // Error states
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
+  const fetchNewUser = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    if (!token) {
+      setErrors({ submit: 'Token is missing' });
+      return;
+    }
+
+    try {
+      const response = await axios.get(`http://localhost:80/api/auth/signup?token=${token}`);
+      setNewUser({ id: response.data.id, name: response.data.displayName });
+    } catch (error) {
+      console.error('Error fetching new user data:', error);
+      setErrors({ submit: 'Invalid token' });
+    }
+  };
+
+  useEffect(() => {
     fetchNewUser();
   }, []);
-
-  if(!newUser){
-    return <div><h1>Not a new user</h1></div>;
-  }
 
   // State for Pet's Details
   const [petDetails, setPetDetails] = useState({
@@ -38,10 +47,6 @@ function Signup() {
       google_id: newUser ? newUser.id : '',
       phone: '',
   });
-
-  // Error states
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
 
   // Handle pet details changes
   const handlePetChange = (e) => {
@@ -103,8 +108,8 @@ function Signup() {
     if (Object.keys(formErrors).length === 0) {
       setIsLoading(true);
       try {
-        const response = await axios.post('http://localhost:5000/api/auth/signup', {
-          google_id: ownerDetails.google_id,
+        const response = await axios.post('http://localhost:80/api/auth/signup', {
+          google_id: newUser.id,
           phone: ownerDetails.phone,
           pet_name: petDetails.pet_name,
           pet_type: petDetails.pet_type,
@@ -126,6 +131,10 @@ function Signup() {
     }
   };
 
+  if(!newUser){
+    return <div><h1>Not a new user</h1></div>;
+  }
+
   return (
     <div className="App">
       <div className="logo-container">
@@ -139,7 +148,7 @@ function Signup() {
           <div className="form-group">
             <input
               type="text"
-              name="name"
+              name="pet_name"
               className={`input-field ${errors.petName ? 'error' : ''}`}
               placeholder="Pet's Name"
               value={petDetails.pet_name}
@@ -149,7 +158,7 @@ function Signup() {
           </div>
           <div className="form-group">
             <select
-              name="type"
+              name="pet_type"
               className={`input-field ${errors.petType ? 'error' : ''}`}
               value={petDetails.pet_type}
               onChange={handlePetChange}
@@ -166,7 +175,7 @@ function Signup() {
           <div className="form-group">
             <input
               type="text"
-              name="breed"
+              name="pet_breed"
               className={`input-field ${errors.breed ? 'error' : ''}`}
               placeholder="Breed"
               value={petDetails.pet_breed}
@@ -176,7 +185,7 @@ function Signup() {
           </div>
           <div className="form-group">
             <select
-              name="sex"
+              name="pet_sex"
               className={`input-field ${errors.sex ? 'error' : ''}`}
               value={petDetails.pet_sex}
               onChange={handlePetChange}
@@ -191,7 +200,7 @@ function Signup() {
             <input
               type="date"
               placeholder="Date of birth"
-              name="dateOfBirth"
+              name="pet_dob"
               className={`input-field ${errors.dateOfBirth ? 'error' : ''}`}
               value={petDetails.pet_dob}
               onChange={handlePetChange}
