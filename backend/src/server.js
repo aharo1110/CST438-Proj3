@@ -49,7 +49,13 @@ app.get('/api/auth/google', passport.authenticate('google', { scope: ['profile',
 app.get('/api/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    res.redirect('http://localhost:3000/home');
+    const { profile, isNew } = req.user;
+    if(isNew){
+      req.session.newUser = profile;
+      res.redirect('http://localhost:3000/signup');
+    } else {
+      res.redirect('http://localhost:3000/home');
+    }
   }
 );
 
@@ -61,6 +67,14 @@ app.get("/", function(req, res, next) {
 });
 
 // API endpoints
+
+app.get("/api/auth/signup"), (req, res) => {
+  if(req.session.newUser){
+    res.json(req.session.newUser);
+  } else {
+    res.status(404).json({ message: 'Not a new user'});
+  }
+}
 
 app.post("/api/auth/signup", (req, res) => {
   const {username, password,
