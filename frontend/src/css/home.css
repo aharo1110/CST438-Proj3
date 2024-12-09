@@ -121,6 +121,7 @@
 .appointments-list li:last-child {
     border-bottom: none;
 }
+
 .appointment-item {
     display: flex;
     justify-content: space-between;

@@ -15,30 +15,69 @@ const morgan = require("morgan");
 const database = require("./database");
 
 const passport = require("passport");
+require('dotenv').config();
+
+const cors = require("cors");
+const session = require("express-session");
 
 // Appi
 const app = express();
 
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(express.json());
+
 require("./auth");
 
-const session = require("express-session");
+const knex = require("./database");
+const jwt = require('jsonwebtoken');
+
+app.use(express.json());
 
 app.use(session({
-  secret: "your-session-secret",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get()"/auth/login", passport.authenticate("oath2"));
-
-app.get("/auth/callback", passport.authenticate("oauth2", { failureRedirect: "/" }), (req, res) => {
-  res.redirect("/home");
-});
-
 app.use(morgan("common"));
+
+// OAuth endpoints
+
+app.get('/api/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/api/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/' }),
+  async (req, res) => {
+    const { profile, isNew } = req.user;
+    const token = jwt.sign({ profile, isNew }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    try {
+      const user = await knex('users').where({ google_id: profile.id }).first();
+      const logToken = jwt.sign({ user}, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      if (isNew) {
+        req.session.newUser = profile;
+        res.redirect(`http://localhost:3000/signup?token=${token}`);
+      } else {
+        res.redirect(`http://localhost:3000/home?token=${logToken}`);
+      }
+    } catch (error) {
+      console.error('Error storing user in session:', error);
+      res.redirect('/');
+    }
+  }
+);
+
+app.get('/api/auth/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('http://localhost:3000/');
+  });
+});
 
 app.get("/", function(req, res, next) {
   database.raw('select VERSION() version')
@@ -47,7 +86,100 @@ app.get("/", function(req, res, next) {
     .catch(next);
 });
 
-// Insert API endpoints here ???
+// API endpoints
+
+app.get("/api/auth/signup", (req, res) => {
+  const token = req.query.token;
+  console.log(token);
+  if (!token) {
+    return res.status(401).json({ message: 'Token is missing' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json(decoded.profile);
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+});
+
+app.post("/api/auth/signup", async (req, res) => {
+  const {google_id, phone,
+    pet_name, pet_type, pet_breed, pet_sex, pet_dob} = req.body;
+    try {
+      // Update user values
+      await knex('users')
+        .where({ google_id: google_id })
+        .update({ phone: phone });
+  
+      const user = await knex('users')
+        .where({ google_id: google_id })
+        .select('user_id')
+        .first();
+
+      const user_id = user.user_id;
+  
+      // Insert pet values
+      await knex('pets').insert({
+        owner: user_id,
+        name: pet_name,
+        type: pet_type,
+        breed: pet_breed,
+        sex: pet_sex,
+        dob: pet_dob
+      });
+      const token = jwt.sign({ user}, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.status(200).json({ message: "Signup successful", token: token });
+    } catch (error) {
+      console.error('Signup error:', error);
+      res.status(500).json({ message: "Failed to create account. Please try again." });
+    }
+});
+
+app.post("/api/pet", (req, res) => {
+  const {owner, name, type, breed, sex, dob} = req.body;
+  // Maybe check if owner exists?
+  if(knex('users').where({ user_id: owner }).first() === undefined) {
+    return res.status(400).json({ message: "Owner does not exist" });
+  }
+  // And if session is authenticated
+  if(!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  knex('pets').insert({
+    owner: owner,
+    name: name,
+    type: type,
+    breed: breed,
+    sex: sex,
+    dob: dob
+  })
+  .then(() => {
+    res.status(200).json({ message: "Pet added" });
+  });
+});
+
+app.get("/api/pet", (req, res) => {
+  if(req.query.owner) {
+    knex('pets')
+      .select('*')
+      .where({ owner: req.query.owner })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else if(req.query.id) {
+    knex('pets')
+      .select('*')
+      .where({ pet_id: req.query.id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else {
+    res.status(400).json({ message: "Missing query parameter" });
+  }
+});
+
+// Health checks/System stuff
 
 app.get("/healthz", function(req, res) {
   // do app logic here to determine if app is truly healthy
@@ -57,5 +189,3 @@ app.get("/healthz", function(req, res) {
 });
 
 module.exports = app;
-
-//I need the url for the homepage in order to proceed or else I will get confused on implication(for now fix the .env file later and auth.js file).
