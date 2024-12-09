@@ -16,10 +16,10 @@ function Admin() {
       navigate('/home');
     }
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    if (userInfo.isAdmin !== 1) {
+    if (userInfo.is_admin !== 1) {
       navigate('/home');
     }
-  }, []);
+  }, [navigate]);
 
   // mocked
   useEffect(() => {
