@@ -50,17 +50,34 @@ app.use(morgan("common"));
 app.get('/api/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/api/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
+  async (req, res) => {
     const { profile, isNew } = req.user;
     const token = jwt.sign({ profile, isNew }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    if(isNew){
-      req.session.newUser = profile;
-      res.redirect(`http://localhost:3000/signup?token=${token}`);
-    } else {
-      res.redirect('http://localhost:3000/home');
+    try {
+      const user = await knex('users').where({ google_id: profile.id }).first();
+      const logToken = jwt.sign({ user}, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      if (isNew) {
+        req.session.newUser = profile;
+        res.redirect(`http://localhost:3000/signup?token=${token}`);
+      } else {
+        res.redirect(`http://localhost:3000/home?token=${logToken}`);
+      }
+    } catch (error) {
+      console.error('Error storing user in session:', error);
+      res.redirect('/');
     }
   }
 );
+
+app.get('/api/auth/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('http://localhost:3000/');
+  });
+});
 
 app.get("/", function(req, res, next) {
   database.raw('select VERSION() version')
@@ -111,8 +128,8 @@ app.post("/api/auth/signup", async (req, res) => {
         sex: pet_sex,
         dob: pet_dob
       });
-  
-      res.status(200).json({ message: "Signup successful" });
+      const token = jwt.sign({ user}, process.env.JWT_SECRET, { expiresIn: '1h' });
+      res.status(200).json({ message: "Signup successful", token: token });
     } catch (error) {
       console.error('Signup error:', error);
       res.status(500).json({ message: "Failed to create account. Please try again." });
@@ -122,7 +139,13 @@ app.post("/api/auth/signup", async (req, res) => {
 app.post("/api/pet", (req, res) => {
   const {owner, name, type, breed, sex, dob} = req.body;
   // Maybe check if owner exists?
+  if(knex('users').where({ user_id: owner }).first() === undefined) {
+    return res.status(400).json({ message: "Owner does not exist" });
+  }
   // And if session is authenticated
+  if(!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   knex('pets').insert({
     owner: owner,
     name: name,
@@ -137,15 +160,23 @@ app.post("/api/pet", (req, res) => {
 });
 
 app.get("/api/pet", (req, res) => {
-  
-  knex('pets')
-  .where({'pet_id': req.query.id})
-  .select('*');
-  
-  // error handling
-
-  // return JSON
-
+  if(req.query.owner) {
+    knex('pets')
+      .select('*')
+      .where({ owner: req.query.owner })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else if(req.query.id) {
+    knex('pets')
+      .select('*')
+      .where({ pet_id: req.query.id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else {
+    res.status(400).json({ message: "Missing query parameter" });
+  }
 });
 
 // Health checks/System stuff

@@ -1,38 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../../login.css';
 import image from '../../images/FURCARE_logo.jpeg'
 
 function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    console.log('Logging in with:', { username, password });
-
-  try {
-    const response = await axios.post('http://localhost:80/api/login', {
-      username: username,
-      password: password,
-    });
-
-    if (response.status === 200) {
-      
-      localStorage.setItem('authToken', response.data.token);
+  useEffect(() => {
+    if (localStorage.getItem('userInfo')) {
       navigate('/home');
     }
-  } catch (error) {
-    console.error('Login failed:', error);
-    alert('Invalid username or password');
-  }
-};
-
-  const handleSignUp = () => {
-    navigate("/signup")
-  };
+  }, [navigate]);
 
   return (
     <div className="App">
