@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../Layout';
 import '../../css/book.css';
+import image from '../../images/FURCARE_logo.jpeg';
+
 
 function Book() {
   const navigate = useNavigate();
@@ -11,8 +13,15 @@ function Book() {
       <div className="book-container">
         <Layout />
         <div className="main-content">
+        <div>
+            <h2> <div className="logo-container">
+        <img src={image} alt="FurCare Logo" className="logo-image" />
+      </div></h2>
+          </div>
           <header className="book-header">
+            
             <h1>Book a Service</h1>
+            
           </header>
           <div className="booking-options">
             <h2>Please select a service:</h2>

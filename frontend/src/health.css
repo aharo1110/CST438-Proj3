@@ -167,10 +167,10 @@
     }
   
     .content {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-      }
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1rem;
+  }
     /* Additional responsive styles for Health component */
     .header {
       text-align: center;

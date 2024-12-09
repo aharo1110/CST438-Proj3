@@ -1,44 +1,40 @@
-
+/* Layout container for fixed width */
 .layout-container {
     width: 100%;
     max-width: 1200px; 
     margin: 0 auto;
     padding: 20px;
-}
-
-/* Base styling */
-.App {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    background: linear-gradient(180deg, #77bdff 75%, #93c4a6 100%);
-    font-family: Arial, sans-serif;
+    align-items: center; /* Centers content horizontally */
 }
 
+/* Fixed header styling */
 .layout-header {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 1.5rem 2rem;
     background-color: transparent;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: fixed;
+    box-shadow: 0 1px 9px rgba(0, 0, 0, 0.1);
+    position: relative;
     top: 0;
-    left: 0;
+    left: -1%;
     z-index: 1000;
+    right: auto;
 }
 
+/* Website name in the header */
 .website-name {
     font-size: 2rem;
     font-weight: bold;
     color: white;
-    text-align: center;
-    flex-grow: 1;
-    margin: 0 1.5rem;
+    margin: 0 auto;
+    text-align: center; /* Ensures proper centering */
 }
 
+/* Button styling */
 .layout-button {
     background-color: #6db96d;
     color: white;
