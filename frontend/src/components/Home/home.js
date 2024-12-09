@@ -50,6 +50,12 @@ function Home() {
             >
               Book A Service
             </button>
+            <button 
+              className="home-button" 
+              onClick={() => navigate('/health')} // Redirect to Health page
+            >
+              Record Pet Health
+            </button>
           </div>
 
           <section className="appointments-section">

@@ -17,7 +17,7 @@ const BrowseSer = () => {
           'GPS tracking',
           'Experienced walkers'
         ],
-        price: '$15 - $25 per walk'
+        price: '$25 per walk'
       },
       sitting: {
         title: 'Pet Sitting',
@@ -29,7 +29,7 @@ const BrowseSer = () => {
           'Daily updates',
           'Overnight stays'
         ],
-        price: '$40 - $80 per day'
+        price: '$80 per day'
       },
       healthcare: {
         title: 'Pet Healthcare',
@@ -41,7 +41,7 @@ const BrowseSer = () => {
           'Emergency consultations',
           'Prescription delivery'
         ],
-        price: '$50 - $150 per consultation'
+        price: '$150 per consultation'
       }
     };
   
@@ -51,8 +51,8 @@ const BrowseSer = () => {
   
     const handleBookService = (service) => {
       // Redirect the user to the booking page for the selected service
-      const serviceRoute = service === 'walking' ? 'petsitting' : service;
-      navigate(`/book`);
+      //const serviceRoute = service === 'walking' ? 'petsitting' : service;
+      navigate(`/book/`);
     };
   
     return (
