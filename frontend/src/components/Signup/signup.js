@@ -117,9 +117,8 @@ function Signup() {
           pet_sex: petDetails.pet_sex,
           pet_dob: petDetails.pet_dob
         });
-        console.log('API response:', response.data);
-        // After successful signup
-        navigate('/home');
+        
+        navigate(`/home?token=${response.data.token}`);
       } catch (error) {
         console.error('Signup error:', error);
         setErrors({ submit: 'Failed to create account. Please try again.' });

@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../Layout'
+import { jwtDecode } from 'jwt-decode';
 import '../../css/home.css';
 import image from '../../images/FURCARE_logo.jpeg';
 
 
 function Home() {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    if(!localStorage.getItem('userInfo')) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      if (!token) {
+        navigate('/');
+      }
+
+      const decoded = jwtDecode(token);
+      setUserInfo(decoded.user);
+      localStorage.setItem('userInfo', JSON.stringify(decoded.user));
+    } else {
+      const info = JSON.parse(localStorage.getItem('userInfo'));
+      setUserInfo(info);
+    }
+  }, [navigate]);
 
   return (
     <div className = "App">
