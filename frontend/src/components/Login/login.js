@@ -1,21 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../login.css';
 import image from '../../images/FURCARE_logo.jpeg'
 
 function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log('Logging in with:', { username, password });
-  };
-
-  const handleSignUp = () => {
-    navigate("/signup")
-  }
+  useEffect(() => {
+    if (localStorage.getItem('userInfo')) {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   return (
     <div className="App">
@@ -26,30 +21,13 @@ function Login() {
 
       </div>
       <div className="login-card">
-        <div className="tabs">
-          <div className="tab active">Login</div>
-          <div className="tab inactive" onClick={handleSignUp}>Sign Up</div>
+        <div className="google-login">
+          <a href="http://localhost:80/api/auth/google">
+            <button className="login-button">
+              Sign in with Google
+            </button>
+          </a>
         </div>
-        <form onSubmit={handleLogin} className="login-form">
-          <input
-            type="text"
-            className="input-field"
-            placeholder="Email add. / Phone No. / Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            className="input-field"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <a href="#" className="forgot-password">Forget Password?</a>
-          <button type="submit" className="login-button" onClick={() => navigate('/home')}>Login</button>
-        </form>
       </div>
     </div>
   );

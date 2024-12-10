@@ -1,3 +1,15 @@
+/* Base styles */
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center vertically */
+    background: linear-gradient(180deg, #77bdff 75%, #93c4a6 100%);
+    font-family: Arial, sans-serif;
+    padding: 20px; /* Reduced padding for better alignment */
+}
+
 /* Book page container with consistent screen margin */
 .book-container {
     width: 100%;
@@ -7,14 +19,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center; /* Center vertically */
 }
 
 /* Main content area with padding to fit below the fixed header */
 .main-content {
-    padding-top: 6rem; /* Adjust for fixed header height */
+    padding: 2rem; /* Adjusted padding for better spacing */
     width: 100%;
     max-width: 1000px;
-    margin-top: 20px;
     text-align: center;
 }
 
@@ -51,3 +63,34 @@
 .booking-button:hover {
     background-color: #6db96d;
 }
+
+/* Profile button styling */
+.profile-button {
+    position: absolute;
+    top: 20px; /* Adjusted to ensure consistent placement */
+    right: 20px;
+    padding: 0.75rem 1.5rem;
+    background-color: #6db96d;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-button:hover {
+    background-color: #5aa85c;
+}
+
+.profile-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(109, 185, 109, 0.5);
+}
+.booking-message {
+    margin-top: 1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    text-align: center;
+  }
+  

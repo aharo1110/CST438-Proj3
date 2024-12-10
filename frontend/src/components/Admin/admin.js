@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../Layout';
 import '../../css/admin.css';
 
 function Admin() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [serviceName, setServiceName] = useState('');
   const [serviceDescription, setServiceDescription] = useState('');
   const [serviceType, setServiceType] = useState(''); // State for service type
   const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (!localStorage.getItem('userInfo')) {
+      navigate('/home');
+    }
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (userInfo.is_admin !== 1) {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   // mocked
   useEffect(() => {
