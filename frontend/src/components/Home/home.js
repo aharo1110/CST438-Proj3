@@ -43,24 +43,25 @@ function Home() {
   };
 
   return (
-    <div className="App">
-      <div className="home-container">
-        <Layout />
+    <div className = "App">
+    <div className="home-container">
+      <Layout />
 
-        <div className="main-content">
+      <div className="main-content">
           <header className="home-header">
             <h1>Welcome to FurCare</h1>
           </header>
-
           <div className="logo-container">
             <img src={image} alt="FurCare Logo" className="logo-image" />
           </div>
 
           <div className="home-buttons">
-            <button onClick={() => navigate('/health')} className="home-button">
-              My Pets
-            </button>
-            <button onClick={() => navigate('/browse')} className="home-button">
+            <button className="home-button"
+            onClick={() => navigate('/profile')}>My Profile</button>
+            <button 
+              className="home-button" 
+              onClick={() => navigate('/browse')} // Redirect to Browse page
+            >
               Browse Services
             </button>
             <button onClick={() => navigate('/location')} className="home-button">

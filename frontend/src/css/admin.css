@@ -68,13 +68,28 @@
 
 .admin-input,
 .admin-textarea {
-    width: 100%;
+    width: 90%;
     padding: 1rem;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
     margin-bottom: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.address-group {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.address-group .admin-input {
+    width: auto;
+}
+
+.address-group .admin-input#address {
+    width: 90%;
 }
 
 .admin-textarea {
