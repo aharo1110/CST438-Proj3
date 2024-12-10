@@ -1,0 +1,90 @@
+
+.profile-container {
+    width: 100%;
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-flex {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: baseline;
+    flex-direction: row;
+}
+
+.sub-flex {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 40px;
+}
+
+.main-content {
+    padding-top: 6rem; 
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 20px;
+}
+
+.profile-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h1 {
+    color: #123351;
+    font-size: 1.67rem;
+    margin: 0;
+}
+
+.profile-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+.profile-button {
+    padding: 1rem 2rem;
+    background-color: #133351;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: 200px;
+}
+
+.profile-button:hover {
+    background-color: #6db96d;
+}
+
+.profile-details {
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    text-align: left;
+}
+
+.profile-pets {
+    width: 100%;
+    max-width: 700px;
+    margin: 10px;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

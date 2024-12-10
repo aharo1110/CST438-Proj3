@@ -11,6 +11,7 @@ import Book from './components/Book/book';
 import BrowseSer from './components/BrowseSer/browse'
 import Location from './components/Location/location';
 import Admin from './components/Admin/admin';
+import Profile from './components/Profile/profile';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/browse" element={<BrowseSer/>}/>
           <Route path="/location" element={<Location />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     );

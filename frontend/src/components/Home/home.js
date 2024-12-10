@@ -48,17 +48,6 @@ function Home() {
       <Layout />
 
       <div className="main-content">
-        <header className="home-header">
-          <h1>Welcome to FurCare</h1>
-        </header>
-
-        <div className="home-buttons">
-          <button onClick={() => navigate('/health')} className="home-button">My Pets</button>
-          <button onClick={() => navigate('/services')} className="home-button">Browse Services</button>
-          <button onClick={() => navigate('/location')} className="home-button">Book A Service</button>
-        </div>
-
-        <div className="main-content">
           <header className="home-header">
             <h1>Welcome to FurCare</h1>
           </header>
@@ -67,7 +56,8 @@ function Home() {
           </div>
 
           <div className="home-buttons">
-            <button className="home-button">My Pets</button>
+            <button className="home-button"
+            onClick={() => navigate('/profile')}>My Profile</button>
             <button 
               className="home-button" 
               onClick={() => navigate('/browse')} // Redirect to Browse page
@@ -123,8 +113,6 @@ function Home() {
         </div>
       </div>
     </div>
-    </div>
-    
   );
 }
 

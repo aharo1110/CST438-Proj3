@@ -142,10 +142,6 @@ app.post("/api/pet", (req, res) => {
   if(knex('users').where({ user_id: owner }).first() === undefined) {
     return res.status(400).json({ message: "Owner does not exist" });
   }
-  // And if session is authenticated
-  if(!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
   knex('pets').insert({
     owner: owner,
     name: name,
@@ -178,6 +174,66 @@ app.get("/api/pet", (req, res) => {
     res.status(400).json({ message: "Missing query parameter" });
   }
 });
+
+app.get("/api/user", (req, res) => {
+  if(req.query.id) {
+    knex('users')
+      .select('*')
+      .where({ user_id: req.query.id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else if(req.query.google_id) {
+    knex('users')
+      .select('*')
+      .where({ google_id: req.query.google_id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else {
+    knex('users')
+      .select('*')
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  }
+});
+
+app.get("/api/service", (req, res) => {
+  if(req.query.id) {
+    knex('services')
+      .select('*')
+      .where({ service_id: req.query.id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else {
+    knex('services')
+      .select('*')
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  }
+});
+
+app.post("/api/service", (req, res) => {
+  let {name, description, service_type, address, city, state, zip} = req.body;
+  state = state.toUpperCase();
+  knex('services').insert({
+    name: name,
+    description: description,
+    service_type: service_type,
+    address: address,
+    city: city,
+    state: state,
+    zip: zip
+  })
+  .then(() => {
+    res.status(200).json({ message: "Service added" });
+  });
+});
+
+
 
 // Health checks/System stuff
 
