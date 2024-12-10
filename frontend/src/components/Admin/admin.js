@@ -29,8 +29,8 @@ function Admin() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.fetch('http://localhost:80/api/users');
-        const data = await response.json();
+        const response = await axios.get('http://localhost:80/api/user');
+        const data = response.data;
         setUsers(data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -39,15 +39,30 @@ function Admin() {
     fetchUsers();
   }, []);
 
-  const handleAddService = (e) => {
+  const handleAddService = async (e) => {
     e.preventDefault();
-
-    // replace later
-    console.log('New Service:', { serviceName, serviceDescription, serviceType });
-    setMessage(`Service "${serviceName}" added successfully as a "${serviceType}" service!`);
-    setServiceName('');
-    setServiceDescription('');
-    setServiceType('');
+    try {
+      const response = await axios.post('http://localhost:80/api/service', {
+        name: serviceName,
+        description: serviceDescription,
+        type: serviceType,
+        address: address,
+        city: city,
+        state: state,
+        zip: zip
+      });
+      console.log('Service added:', response.data);
+      setMessage(`Service "${serviceName}" added successfully as a "${serviceType}" service!`);
+      setServiceName('');
+      setServiceDescription('');
+      setServiceType('');
+      setAddress('');
+      setCity('');
+      setState('');
+      setZip('');
+    } catch (error) {
+      console.error('Error adding service:', error);
+    }
   };
 
   return (
@@ -63,7 +78,7 @@ function Admin() {
               <h2>All Users</h2>
               <ul>
                 {users.map((user, index) => (
-                  <li key={index}>{user.name}</li>
+                  <li key={index}>{user.username}</li>
                 ))}
               </ul>
             </div>
@@ -76,7 +91,7 @@ function Admin() {
                   value={serviceName}
                   onChange={(e) => setServiceName(e.target.value)}
                   className="admin-input"
-                  maxlength="60"
+                  maxLength="60"
                   required
                 />
                 <textarea
@@ -84,43 +99,48 @@ function Admin() {
                   value={serviceDescription}
                   onChange={(e) => setServiceDescription(e.target.value)}
                   className="admin-textarea"
-                  maxlength="255"
+                  maxLength="255"
                   required
                 />
-                <div>
+                <div className="address-group">
                   <input
+                    type="text"
                     placeholder="Address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    className="admin-textarea"
-                    maxlength="60"
+                    className="admin-input"
+                    id="address"
+                    maxLength="60"
                     size="30"
                     required
                   />
                   <input
+                    type="text"
                     placeholder="City"
-                    value={address}
+                    value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="admin-textarea"
-                    maxlength="60"
-                    size="20"
+                    className="admin-input"
+                    maxLength="60"
+                    size="18"
                     required
                   />
                   <input
+                    type="text"
                     placeholder="State"
-                    value={address}
+                    value={state}
                     onChange={(e) => setState(e.target.value)}
-                    className="admin-textarea"
-                    maxlength="2"
-                    size="2"
+                    className="admin-input"
+                    maxLength="2"
+                    size="3"
                     required
                   />
                   <input
+                    type="text"
                     placeholder="Zip"
-                    value={address}
+                    value={zip}
                     onChange={(e) => setZip(e.target.value)}
-                    className="admin-textarea"
-                    maxlength="10"
+                    className="admin-input"
+                    maxLength="10"
                     size="10"
                     required
                   />
@@ -134,9 +154,9 @@ function Admin() {
                   <option value="" disabled>
                     Select Service Type
                   </option>
-                  <option value="Pet Walking">Pet Walking</option>
-                  <option value="Pet Sitting">Pet Sitting</option>
-                  <option value="Pet Healthcare">Pet Healthcare</option>
+                  <option value="walking">Pet Walking</option>
+                  <option value="sitting">Pet Sitting</option>
+                  <option value="healthcare">Pet Healthcare</option>
                 </select>
                 <br></br>
                 <br></br>
