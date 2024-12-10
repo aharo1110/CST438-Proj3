@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Layout from '../../Layout';
+import { useNavigate } from 'react-router-dom';
 import '../../css/book.css';
 import image from '../../images/FURCARE_logo.jpeg';
-import { useNavigate } from 'react-router-dom';
 
 function Book() {
   const navigate = useNavigate();
+
   const [message, setMessage] = useState(''); // State to handle the booking message
   const handleBooking = (service) => {
     setMessage(`Your appointment for ${service} has been booked`);
@@ -30,12 +31,28 @@ function Book() {
           </header>
           <div className="booking-options">
             <h2>Please select a service:</h2>
-            <button onClick={() => navigate('/book/petsitting')} className="booking-button">Petsitting</button>
-            <button onClick={() => navigate('/book/maintenance')} className="booking-button">Maintenance Care</button>
-          </div>
+            <button
+              onClick={() => handleBooking('Pet Walking')}
+              className="booking-button"
+            >
+              Pet Walking
+            </button>
+            <button
+              onClick={() => handleBooking('Pet Sitting')}
+              className="booking-button"
+            >
+              Pet Sitting
+            </button>
+            <button
+              onClick={() => handleBooking('Pet Healthcare')}
+              className="booking-button"
+            >
+              Pet Healthcare
+            </button>
           {message && <p className="booking-message">{message}</p>}
         </div>
       </div>
+    </div>
     </div>
   );
 }
