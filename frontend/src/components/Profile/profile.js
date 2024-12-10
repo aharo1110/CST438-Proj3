@@ -54,8 +54,7 @@ function Profile() {
                         <div className="profile-details">
                             <h2>My Details</h2>
                             <div>{userInfo.email}</div>
-                            <div>{userInfo.phone}</div>
-                        <div>{userInfo.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2-$3')}</div>
+                            <div>{userInfo.phone ? userInfo.phone.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2-$3') : ''}</div>
                         </div>
                         <div className="profile-buttons">
                             <button className="profile-button">Add Pet</button>
