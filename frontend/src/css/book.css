@@ -65,7 +65,7 @@
 }
 
 /* Profile button styling */
-.profile-button {
+.view-profile-button {
     position: absolute;
     top: 20px; /* Adjusted to ensure consistent placement */
     right: 20px;
@@ -79,11 +79,11 @@
     transition: background-color 0.3s ease;
 }
 
-.profile-button:hover {
+.view-profile-button:hover {
     background-color: #5aa85c;
 }
 
-.profile-button:focus {
+.view-profile-button:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(109, 185, 109, 0.5);
 }

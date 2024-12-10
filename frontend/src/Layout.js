@@ -13,6 +13,9 @@ function Layout() {
   return (
     <header className="layout-header">
       <button onClick={() => navigate('/home')} className="layout-button">Home</button>
+      {localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo')).is_admin === 1 && (
+        <button onClick={() => navigate('/admin')} className="layout-button">Admin</button>
+      )}
       <div className="website-name">FurCare</div>
       <button onClick={() => navigate('/profile')} className="layout-button">Profile</button>
       <button onClick={handleLogout} className="layout-button">Logout</button>
