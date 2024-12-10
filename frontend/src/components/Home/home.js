@@ -60,7 +60,7 @@ function Home() {
             <button onClick={() => navigate('/health')} className="home-button">
               My Pets
             </button>
-            <button onClick={() => navigate('/services')} className="home-button">
+            <button onClick={() => navigate('/browse')} className="home-button">
               Browse Services
             </button>
             <button onClick={() => navigate('/location')} className="home-button">

@@ -1,7 +1,7 @@
 const app = require("./server");
 const { port } = require("./config");
 require('dotenv').config;
-console.log('Backend ENV:', process.env.GOOGLE_CLIENT_ID)
+
 
 
 const server = app.listen(port, function() {
