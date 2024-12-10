@@ -13,7 +13,7 @@ function Petsitting() {
   useEffect(() => {
     const fetchPetsittingServices = async () => {
       try {
-        const response = await fetch(`/services/petsitting?lat=${lat}&lng=${lng}`);
+        const response = await fetch(`/book/petsitting?lat=${lat}&lng=${lng}`);
         if (!response.ok) {
           throw new Error('Failed to fetch petsitting services.');
         }

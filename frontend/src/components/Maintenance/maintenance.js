@@ -13,9 +13,9 @@ function Maintenance() {
   useEffect(() => {
     const fetchMaintenanceServices = async () => {
       try {
-        const response = await fetch(`/services/maintenance?lat=${lat}&lng=${lng}`);
+        const response = await fetch(`/location/book/maintenance?lat=${lat}&lng=${lng}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch maintenance services.');
+          throw new Error('Failed to fetch mai ntenance services.');
         }
         const data = await response.json();
         setServices(data);
