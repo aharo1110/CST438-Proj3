@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Layout from '../../Layout';
 import '../../css/admin.css';
 
@@ -8,7 +9,11 @@ function Admin() {
   const [users, setUsers] = useState([]);
   const [serviceName, setServiceName] = useState('');
   const [serviceDescription, setServiceDescription] = useState('');
-  const [serviceType, setServiceType] = useState(''); // State for service type
+  const [serviceType, setServiceType] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zip, setZip] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -21,11 +26,10 @@ function Admin() {
     }
   }, [navigate]);
 
-  // mocked
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('/users/all');
+        const response = await axios.fetch('http://localhost:80/api/users');
         const data = await response.json();
         setUsers(data);
       } catch (error) {
@@ -81,6 +85,36 @@ function Admin() {
                   className="admin-textarea"
                   required
                 />
+                <div>
+                  <textarea
+                    placeholder="Address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="admin-textarea"
+                    required
+                  />
+                  <textarea
+                    placeholder="City"
+                    value={address}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="admin-textarea"
+                    required
+                  />
+                  <textarea
+                    placeholder="State"
+                    value={address}
+                    onChange={(e) => setState(e.target.value)}
+                    className="admin-textarea"
+                    required
+                  />
+                  <textarea
+                    placeholder="Zip"
+                    value={address}
+                    onChange={(e) => setZip(e.target.value)}
+                    className="admin-textarea"
+                    required
+                  />
+                </div>
                 <select
                   value={serviceType}
                   onChange={(e) => setServiceType(e.target.value)}
@@ -90,8 +124,9 @@ function Admin() {
                   <option value="" disabled>
                     Select Service Type
                   </option>
-                  <option value="Maintenance">Maintenance</option>
-                  <option value="Petsitting">Petsitting</option>
+                  <option value="Pet Walking">Pet Walking</option>
+                  <option value="Pet Sitting">Pet Sitting</option>
+                  <option value="Pet Healthcare">Pet Healthcare</option>
                 </select>
                 <br></br>
                 <br></br>
