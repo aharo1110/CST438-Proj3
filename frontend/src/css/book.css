@@ -87,3 +87,10 @@
     outline: none;
     box-shadow: 0 0 0 3px rgba(109, 185, 109, 0.5);
 }
+.booking-message {
+    margin-top: 1rem;
+    color: var(--primary-color);
+    font-weight: bold;
+    text-align: center;
+  }
+  

@@ -80,6 +80,13 @@ function Health() {
 
   return (
     <div className="App">
+      <button
+          className="health-home"
+          onClick={() => navigate('/home')} // Navigate to the home page
+        >
+          Home
+        </button>
+      
       <div className="header">
         <div className="contact-info">
           <input
