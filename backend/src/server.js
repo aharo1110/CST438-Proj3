@@ -179,6 +179,33 @@ app.get("/api/pet", (req, res) => {
   }
 });
 
+app.get("/api/user", (req, res) => {
+  if(!req.isAuthenticated()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  if(req.query.id) {
+    knex('users')
+      .select('*')
+      .where({ user_id: req.query.id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else if(req.query.google_id) {
+    knex('users')
+      .select('*')
+      .where({ google_id: req.query.google_id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else {
+    knex('users')
+      .select('*')
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  }
+});
+
 // Health checks/System stuff
 
 app.get("/healthz", function(req, res) {
