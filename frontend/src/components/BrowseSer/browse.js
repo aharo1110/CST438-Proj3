@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Layout from '../../Layout';
 import axios from 'axios';
 import '../../browse.css';
 
@@ -32,6 +33,7 @@ const BrowseSer = () => {
       try {
         const response = await axios.get(`http://localhost:80/api/service?type=${service}`);
         setServiceOptions(response.data);
+        console.log(serviceOptions);
       } catch (error) {
         console.error('Error fetching service details:', error);
       }
@@ -62,21 +64,24 @@ const BrowseSer = () => {
   
           <div className="service-details">
             <div className="service-options">
-              {serviceOptions.map((option) => (
-                <div key={option.id} className="service-option">
-                  <h2>{option.name}</h2>
-                  <p>{option.description}</p>
-                  <p>{option.address}
-                    <br />{option.city}, {option.state} {option.zip.substring(0,6)}
-                  </p>
-                  <button
-                    className="book-button"
-                    onClick={() => handleBookService(option.id)}
-                  >
-                    Book Now
-                  </button>
-                </div>
-              ))}
+              {Object.keys(serviceOptions).map((key) => {
+                const option = serviceOptions[key];
+                return (
+                  <div key={option.service_id} className="service-option">
+                    <h2>{option.name}</h2>
+                    <p>{option.description}</p>
+                    <p>{option.address}
+                      <br />{option.city}, {option.state} {option.zip ? option.zip.substring(0, 6) : ''}
+                    </p>
+                    <button
+                      className="book-button"
+                      onClick={() => handleBookService(option.id)}
+                    >
+                      Book Now
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

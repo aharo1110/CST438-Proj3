@@ -45,11 +45,13 @@ function Admin() {
       const response = await axios.post('http://localhost:80/api/service', {
         name: serviceName,
         description: serviceDescription,
-        type: serviceType,
+        service_type: serviceType,
         address: address,
         city: city,
         state: state,
         zip: zip
+      }, {
+        withCredentials: true
       });
       console.log('Service added:', response.data);
       setMessage(`Service "${serviceName}" added successfully as a "${serviceType}" service!`);
