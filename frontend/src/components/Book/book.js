@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import Layout from '../../Layout';
 import { useNavigate } from 'react-router-dom';
-
 import '../../css/book.css';
 import image from '../../images/FURCARE_logo.jpeg';
-import { useNavigate } from 'react-router-dom';
 
 function Book() {
   const navigate = useNavigate();
