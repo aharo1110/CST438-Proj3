@@ -28,24 +28,8 @@ function Book() {
           </header>
           <div className="booking-options">
             <h2>Please select a service:</h2>
-            <button
-              onClick={() => handleBooking('Pet Walking')}
-              className="booking-button"
-            >
-              Pet Walking
-            </button>
-            <button
-              onClick={() => handleBooking('Pet Sitting')}
-              className="booking-button"
-            >
-              Pet Sitting
-            </button>
-            <button
-              onClick={() => handleBooking('Pet Healthcare')}
-              className="booking-button"
-            >
-              Pet Healthcare
-            </button>
+            <button onClick={() => navigate('/book/petsitting')} className="booking-button">Petsitting</button>
+            <button onClick={() => navigate('/book/maintenance')} className="booking-button">Maintenance Care</button>
           </div>
           {message && <p className="booking-message">{message}</p>}
         </div>
