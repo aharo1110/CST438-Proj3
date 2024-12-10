@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import Layout from '../../Layout';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Layout from '../../Layout'
+import { jwtDecode } from 'jwt-decode';
 import '../../css/home.css';
 import image from '../../images/FURCARE_logo.jpeg';
 
 function Home() {
-  const [appointments, setAppointments] = useState([]); // Start with no appointments
+  const [appointments, setAppointments] = useState([]);
   const [newAppointment, setNewAppointment] = useState("");
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    if(!localStorage.getItem('userInfo')) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      if (!token) {
+        navigate('/');
+      }
+
+      const decoded = jwtDecode(token);
+      setUserInfo(decoded.user);
+      localStorage.setItem('userInfo', JSON.stringify(decoded.user));
+    } else {
+      const info = JSON.parse(localStorage.getItem('userInfo'));
+      setUserInfo(info);
+    }
+  }, [navigate]);
 
   // Handler for deleting an appointment
   const handleDelete = (id) => {
@@ -22,11 +41,22 @@ function Home() {
       setNewAppointment(""); // Clear input field
     }
   };
-
+  
   return (
-    <div className="App">
-      <div className="home-container">
-        <Layout />
+    <div className = "App">
+    <div className="home-container">
+      <Layout />
+
+      <div className="main-content">
+        <header className="home-header">
+          <h1>Welcome to FurCare</h1>
+        </header>
+
+        <div className="home-buttons">
+          <button onClick={() => navigate('/health')} className="home-button">My Pets</button>
+          <button onClick={() => navigate('/services')} className="home-button">Browse Services</button>
+          <button onClick={() => navigate('/location')} className="home-button">Book A Service</button>
+        </div>
 
         <div className="main-content">
           <header className="home-header">
