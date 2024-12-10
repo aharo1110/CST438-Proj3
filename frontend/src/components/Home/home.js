@@ -7,7 +7,12 @@ import image from '../../images/FURCARE_logo.jpeg';
 
 function Home() {
   const [appointments, setAppointments] = useState([]);
-  const [newAppointment, setNewAppointment] = useState("");
+  const [newAppointment, setNewAppointment] = useState({
+    service_id: '',
+    pet_id: '',
+    appointment_date: '',
+    appointment_time: '',
+  });
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
 
@@ -28,19 +33,60 @@ function Home() {
     }
   }, [navigate]);
 
-  // Handler for deleting an appointment
-  const handleDelete = (id) => {
-    setAppointments(appointments.filter((appointment) => appointment.id !== id));
-  };
-
-  // Handler for adding a new appointment
-  const handleAdd = () => {
-    if (newAppointment.trim()) {
-      const newId = appointments.length > 0 ? appointments[appointments.length - 1].id + 1 : 1;
-      setAppointments([...appointments, { id: newId, text: newAppointment }]);
-      setNewAppointment(""); // Clear input field
+  // Fetch appointments on component load
+  useEffect(() => {
+    if (userInfo) {
+      fetch(`/api/appointment?user_id=${userInfo.user_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setAppointments(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching appointments:", error);
+        });
     }
-  };
+  }, [userInfo]);
+
+ // Handler for deleting an appointment
+ const handleDelete = (id) => {
+  fetch(`/api/appointment?id=${id}`, {
+    method: 'DELETE',
+  })
+    .then((response) => {
+      if (response.ok) {
+        setAppointments(appointments.filter((appointment) => appointment.appointment_id !== id));
+      }
+    })
+    .catch((error) => console.error("Error deleting appointment:", error));
+};
+
+const handleAdd = () => {
+  if (Object.values(newAppointment).every((field) => field.trim())) {
+    fetch('/api/appointment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...newAppointment,
+        user_id: userInfo.user_id,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setAppointments([...appointments, data]);
+        setNewAppointment({
+          service_id: '',
+          pet_id: '',
+          appointment_date: '',
+          appointment_time: '',
+        });
+      })
+      .catch((error) => console.error("Error adding appointment:", error));
+  } else {
+    alert('Please fill all fields.');
+  }
+};
   
   return (
     <div className = "App">
@@ -78,38 +124,54 @@ function Home() {
             </button>
           </div>
 
-          <section className="appointments-section">
-            <h2>Upcoming Appointments</h2>
-            {appointments.length === 0 ? (
-              <p>No upcoming appointments. Add one below!</p>
-            ) : (
-              <ul className="appointments-list">
+          {/* Appointment Form */}
+          <div className="appointment-form">
+            <input
+              type="text"
+              placeholder="Service ID"
+              value={newAppointment.service_id}
+              onChange={(e) => setNewAppointment({ ...newAppointment, service_id: e.target.value })}
+            />
+            <input
+              type="text"
+              placeholder="Pet ID"
+              value={newAppointment.pet_id}
+              onChange={(e) => setNewAppointment({ ...newAppointment, pet_id: e.target.value })}
+            />
+            <input
+              type="date"
+              value={newAppointment.appointment_date}
+              onChange={(e) => setNewAppointment({ ...newAppointment, appointment_date: e.target.value })}
+            />
+            <input
+              type="time"
+              value={newAppointment.appointment_time}
+              onChange={(e) => setNewAppointment({ ...newAppointment, appointment_time: e.target.value })}
+            />
+            <button onClick={handleAdd}>Add Appointment</button>
+          </div>
+
+          {/* Display Appointments */}
+          <div className="appointments-list">
+            <h2>Your Appointments</h2>
+            {appointments.length > 0 ? (
+              <ul>
                 {appointments.map((appointment) => (
-                  <li key={appointment.id} className="appointment-item">
-                    <span>{appointment.text}</span>
-                    <button
-                      onClick={() => handleDelete(appointment.id)}
-                      className="delete-button"
-                    >
-                      Delete
-                    </button>
+                  <li key={appointment.appointment_id}>
+                    <div>
+                      <p>Service ID: {appointment.service_id}</p>
+                      <p>Pet ID: {appointment.pet_id}</p>
+                      <p>Date: {appointment.appointment_date}</p>
+                      <p>Time: {appointment.appointment_time}</p>
+                      <button onClick={() => handleDelete(appointment.appointment_id)}>Delete</button>
+                    </div>
                   </li>
                 ))}
               </ul>
+            ) : (
+              <p>No appointments yet.</p>
             )}
-            <div className="add-appointment">
-              <input
-                type="text"
-                value={newAppointment}
-                onChange={(e) => setNewAppointment(e.target.value)}
-                placeholder="Add new appointment (e.g., Vet - 11/10/2024 - 3:00 PM)"
-                className="appointment-input"
-              />
-              <button onClick={handleAdd} className="add-button">
-                Add Appointment
-              </button>
-            </div>
-          </section>
+          </div>
         </div>
       </div>
     </div>
