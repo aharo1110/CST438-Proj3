@@ -1,52 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../../signup.css';
 import image from '../../images/FURCARE_logo.jpeg';
 
 function Signup() {
   const navigate = useNavigate();
-  const [newUser, setNewUser] = useState(null);
-
-  // Error states
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  const fetchNewUser = async () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    if (!token) {
-      setErrors({ submit: 'Token is missing' });
-      return;
-    }
-
-    try {
-      const response = await axios.get(`http://localhost:80/api/auth/signup?token=${token}`);
-      setNewUser({ id: response.data.id, name: response.data.displayName });
-    } catch (error) {
-      console.error('Error fetching new user data:', error);
-      setErrors({ submit: 'Invalid token' });
-    }
-  };
-
-  useEffect(() => {
-    fetchNewUser();
-  }, []);
 
   // State for Pet's Details
   const [petDetails, setPetDetails] = useState({
-    pet_name: '',
-    pet_type: '',
-    pet_breed: '',
-    pet_sex: '',
-    pet_dob: ''
+    name: '',
+    type: '',
+    breed: '',
+    sex: '',
+    dateOfBirth: ''
   });
 
   // State for Owner's Details
   const [ownerDetails, setOwnerDetails] = useState({
-      google_id: newUser ? newUser.id : '',
-      phone: '',
+    name: '',
+    phone: '',
+    email: ''
   });
+
+  // State for Login Credentials
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  // Error states
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle pet details changes
   const handlePetChange = (e) => {
@@ -77,24 +62,46 @@ function Signup() {
     }
   };
 
+  // Handle credentials changes
+  const handleCredentialsChange = (e) => {
+    const { name, value } = e.target;
+    setCredentials(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   // Validate form
   const validateForm = () => {
     const newErrors = {};
 
     // Validate Pet Details
-    if (!petDetails.pet_name) newErrors.petName = 'Pet name is required';
-    if (!petDetails.pet_name) newErrors.petType = 'Pet type is required';
-    if (!petDetails.pet_breed) newErrors.breed = 'Breed is required';
-    if (!petDetails.pet_sex) newErrors.sex = 'Sex is required';
-    if (!petDetails.pet_dob) newErrors.dateOfBirth = 'Date of birth is required';
+    if (!petDetails.name) newErrors.petName = 'Pet name is required';
+    if (!petDetails.type) newErrors.petType = 'Pet type is required';
+    if (!petDetails.breed) newErrors.breed = 'Breed is required';
+    if (!petDetails.sex) newErrors.sex = 'Sex is required';
+    if (!petDetails.dateOfBirth) newErrors.dateOfBirth = 'Date of birth is required';
 
     // Validate Owner Details
+    if (!ownerDetails.name) newErrors.ownerName = 'Owner name is required';
     if (!ownerDetails.phone) {
       newErrors.phone = 'Phone number is required';
     } else if (ownerDetails.phone.length !== 10) {
       newErrors.phone = 'Phone number must be 10 digits';
     } else if (!/^[0-9]{10}$/.test(ownerDetails.phone)) {
       newErrors.phone = 'Invalid phone number format';
+    }
+    
+    if (!ownerDetails.email) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(ownerDetails.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+
+    // Validate Credentials
+    if (!credentials.username) newErrors.username = 'Username is required';
+    if (!credentials.password) newErrors.password = 'Password is required';
+    if (credentials.password !== credentials.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     return newErrors;
@@ -108,17 +115,10 @@ function Signup() {
     if (Object.keys(formErrors).length === 0) {
       setIsLoading(true);
       try {
-        const response = await axios.post('http://localhost:80/api/auth/signup', {
-          google_id: newUser.id,
-          phone: ownerDetails.phone,
-          pet_name: petDetails.pet_name,
-          pet_type: petDetails.pet_type,
-          pet_breed: petDetails.pet_breed,
-          pet_sex: petDetails.pet_sex,
-          pet_dob: petDetails.pet_dob
-        });
-        
-        navigate(`/home?token=${response.data.token}`);
+        // Your API call here
+        console.log('Submitting:', { petDetails, ownerDetails, credentials });
+        // After successful signup
+        navigate('/login');
       } catch (error) {
         console.error('Signup error:', error);
         setErrors({ submit: 'Failed to create account. Please try again.' });
@@ -130,10 +130,6 @@ function Signup() {
     }
   };
 
-  if(!newUser){
-    return <div><h1>Not a new user</h1></div>;
-  }
-
   return (
     <div className="App">
       <div className="logo-container">
@@ -141,25 +137,28 @@ function Signup() {
         <div className="logo">FurCare</div>
       </div>
       <div className="signup-card">
-        <h1>Welcome, {newUser.name}</h1>
+        <div className="tabs">
+          <div className="tab inactive" onClick={() => navigate('/')}>Login</div>
+          <div className="tab active">Sign Up</div>
+        </div>
         <form onSubmit={handleSubmit} className="signup-form">
           <div className="section-title">Pet's Details</div>
           <div className="form-group">
             <input
               type="text"
-              name="pet_name"
+              name="name"
               className={`input-field ${errors.petName ? 'error' : ''}`}
               placeholder="Pet's Name"
-              value={petDetails.pet_name}
+              value={petDetails.name}
               onChange={handlePetChange}
             />
             {errors.petName && <div className="error-message">{errors.petName}</div>}
           </div>
           <div className="form-group">
             <select
-              name="pet_type"
+              name="type"
               className={`input-field ${errors.petType ? 'error' : ''}`}
-              value={petDetails.pet_type}
+              value={petDetails.type}
               onChange={handlePetChange}
             >
               <option value="">Select Pet Type</option>
@@ -174,19 +173,19 @@ function Signup() {
           <div className="form-group">
             <input
               type="text"
-              name="pet_breed"
+              name="breed"
               className={`input-field ${errors.breed ? 'error' : ''}`}
               placeholder="Breed"
-              value={petDetails.pet_breed}
+              value={petDetails.breed}
               onChange={handlePetChange}
             />
             {errors.breed && <div className="error-message">{errors.breed}</div>}
           </div>
           <div className="form-group">
             <select
-              name="pet_sex"
+              name="sex"
               className={`input-field ${errors.sex ? 'error' : ''}`}
-              value={petDetails.pet_sex}
+              value={petDetails.sex}
               onChange={handlePetChange}
             >
               <option value="">Select Sex</option>
@@ -199,15 +198,26 @@ function Signup() {
             <input
               type="date"
               placeholder="Date of birth"
-              name="pet_dob"
+              name="dateOfBirth"
               className={`input-field ${errors.dateOfBirth ? 'error' : ''}`}
-              value={petDetails.pet_dob}
+              value={petDetails.dateOfBirth}
               onChange={handlePetChange}
             />
             {errors.dateOfBirth && <div className="error-message">{errors.dateOfBirth}</div>}
           </div>
 
           <div className="section-title">Owner's Details</div>
+          <div className="form-group">
+            <input
+              type="text"
+              name="name"
+              className={`input-field ${errors.ownerName ? 'error' : ''}`}
+              placeholder="Owner's Name"
+              value={ownerDetails.name}
+              onChange={handleOwnerChange}
+            />
+            {errors.ownerName && <div className="error-message">{errors.ownerName}</div>}
+          </div>
           <div className="form-group">
             <input
               type="tel"
@@ -226,6 +236,52 @@ function Signup() {
               inputMode="numeric"
             />
             {errors.phone && <div className="error-message">{errors.phone}</div>}
+          </div>
+          <div className="form-group">
+            <input
+              type="email"
+              name="email"
+              className={`input-field ${errors.email ? 'error' : ''}`}
+              placeholder="Email Address"
+              value={ownerDetails.email}
+              onChange={handleOwnerChange}
+            />
+            {errors.email && <div className="error-message">{errors.email}</div>}
+          </div>
+
+          <div className="section-title">Login Credentials</div>
+          <div className="form-group">
+            <input
+              type="text"
+              name="username"
+              className={`input-field ${errors.username ? 'error' : ''}`}
+              placeholder="Username"
+              value={credentials.username}
+              onChange={handleCredentialsChange}
+            />
+            {errors.username && <div className="error-message">{errors.username}</div>}
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              name="password"
+              className={`input-field ${errors.password ? 'error' : ''}`}
+              placeholder="Password"
+              value={credentials.password}
+              onChange={handleCredentialsChange}
+            />
+            {errors.password && <div className="error-message">{errors.password}</div>}
+          </div>
+          <div className="form-group">
+            <input
+              type="password"
+              name="confirmPassword"
+              className={`input-field ${errors.confirmPassword ? 'error' : ''}`}
+              placeholder="Re-enter Password"
+              value={credentials.confirmPassword}
+              onChange={handleCredentialsChange}
+            />
+            {errors.confirmPassword && <div className="error-message">{errors.confirmPassword}</div>}
           </div>
 
           {errors.submit && <div className="error-message">{errors.submit}</div>}
