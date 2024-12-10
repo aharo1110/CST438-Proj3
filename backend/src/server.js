@@ -207,6 +207,13 @@ app.get("/api/service", (req, res) => {
       .then((rows) => {
         res.status(200).json(rows);
       });
+  } else if(req.query.type) {
+    knex('services')
+      .select('*')
+      .where({ service_type: req.query.type })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
   } else {
     knex('services')
       .select('*')

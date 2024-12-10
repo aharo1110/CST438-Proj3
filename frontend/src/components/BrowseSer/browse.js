@@ -1,62 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../../browse.css';
 
 const BrowseSer = () => {
     const [activeService, setActiveService] = useState('walking');
+    const [serviceOptions, setServiceOptions] = useState({});
     const navigate = useNavigate();
   
     const services = {
       walking: {
         title: 'Pet Walking',
-        icon: '🐕',
-        description: 'Professional dog walking services',
-        details: [
-          'Scheduled walks',
-          'Individual or group walks',
-          'GPS tracking',
-          'Experienced walkers'
-        ],
-        price: '$25 per walk'
+        icon: '🐕'
       },
       sitting: {
         title: 'Pet Sitting',
-        icon: '🐱',
-        description: 'Comprehensive home pet care',
-        details: [
-          'In-home visits',
-          'Feeding and medication',
-          'Daily updates',
-          'Overnight stays'
-        ],
-        price: '$80 per day'
+        icon: '🐱'
       },
       healthcare: {
         title: 'Pet Healthcare',
-        icon: '🩺',
-        description: 'Veterinary and wellness services',
-        details: [
-          'Health check-ups',
-          'Vaccination',
-          'Emergency consultations',
-          'Prescription delivery'
-        ],
-        price: '$150 per consultation'
+        icon: '🩺'
       }
     };
   
     const handleServiceChange = (service) => {
       setActiveService(service);
+      fetchServiceDetails(service);
+    };
+
+    const fetchServiceDetails = async (service) => {
+      try {
+        const response = await axios.get(`http://localhost:80/api/service?type=${service}`);
+        setServiceOptions(response.data);
+      } catch (error) {
+        console.error('Error fetching service details:', error);
+      }
     };
   
     const handleBookService = (service) => {
       // Redirect the user to the booking page for the selected service
-      //const serviceRoute = service === 'walking' ? 'petsitting' : service;
-      navigate(`/book/`);
+      navigate(`/book?service=${service}`);
     };
   
     return (
       <div className="App">
+        < Layout />
         <div className="pet-services-container">
           <h1 className="pet-services-title">FurCare Services</h1>
   
@@ -73,28 +61,22 @@ const BrowseSer = () => {
           </div>
   
           <div className="service-details">
-            <div className="service-info">
-              <h2 className="service-title">{services[activeService].title}</h2>
-              <p className="service-description">{services[activeService].description}</p>
-  
-              <ul className="service-features">
-                {services[activeService].details.map((detail, index) => (
-                  <li key={index} className="service-feature">{detail}</li>
-                ))}
-              </ul>
-  
-              <div className="service-pricing">
-                <span className="price-tag">
-                  Price Range: {services[activeService].price}
-                </span>
-              </div>
-  
-              <button
-                className="book-service-btn"
-                onClick={() => handleBookService(activeService)}
-              >
-                Book {services[activeService].title} Service
-              </button>
+            <div className="service-options">
+              {serviceOptions.map((option) => (
+                <div key={option.id} className="service-option">
+                  <h2>{option.name}</h2>
+                  <p>{option.description}</p>
+                  <p>{option.address}
+                    <br />{option.city}, {option.state} {option.zip.substring(0,6)}
+                  </p>
+                  <button
+                    className="book-button"
+                    onClick={() => handleBookService(option.id)}
+                  >
+                    Book Now
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>
