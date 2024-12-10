@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../Layout';
+import Layout from '../../Layout'
 import { jwtDecode } from 'jwt-decode';
 import '../../css/home.css';
 import image from '../../images/FURCARE_logo.jpeg';
@@ -12,40 +12,28 @@ function Home() {
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
-    const storedUserInfo = localStorage.getItem('userInfo');
-
-    if (!storedUserInfo) {
+    if(!localStorage.getItem('userInfo')) {
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get('token');
-
       if (!token) {
-        console.warn('No token provided, redirecting to login.');
-        navigate('/'); // Redirect to login
-        return;
-      }
-
-      try {
-        const decoded = jwtDecode(token);
-        if (decoded && decoded.user) {
-          setUserInfo(decoded.user);
-          localStorage.setItem('userInfo', JSON.stringify(decoded.user));
-        } else {
-          console.error('Invalid token payload, redirecting to login.');
-          navigate('/');
-        }
-      } catch (error) {
-        console.error('Failed to decode token:', error);
         navigate('/');
       }
+
+      const decoded = jwtDecode(token);
+      setUserInfo(decoded.user);
+      localStorage.setItem('userInfo', JSON.stringify(decoded.user));
     } else {
-      setUserInfo(JSON.parse(storedUserInfo));
+      const info = JSON.parse(localStorage.getItem('userInfo'));
+      setUserInfo(info);
     }
   }, [navigate]);
 
+  // Handler for deleting an appointment
   const handleDelete = (id) => {
     setAppointments(appointments.filter((appointment) => appointment.id !== id));
   };
 
+  // Handler for adding a new appointment
   const handleAdd = () => {
     if (newAppointment.trim()) {
       const newId = appointments.length > 0 ? appointments[appointments.length - 1].id + 1 : 1;
@@ -53,13 +41,13 @@ function Home() {
       setNewAppointment(""); // Clear input field
     }
   };
-
+  
   return (
-    <div className="App">
-      <div className="home-container">
-        <Layout />
+    <div className = "App">
+    <div className="home-container">
+      <Layout />
 
-        <div className="main-content">
+      <div className="main-content">
           <header className="home-header">
             <h1>Welcome to FurCare</h1>
           </header>
@@ -68,16 +56,24 @@ function Home() {
           </div>
 
           <div className="home-buttons">
-            <button className="home-button" onClick={() => navigate('/profile')}>
-              My Profile
-            </button>
-            <button className="home-button" onClick={() => navigate('/browse')}>
+            <button className="home-button"
+            onClick={() => navigate('/profile')}>My Profile</button>
+            <button 
+              className="home-button" 
+              onClick={() => navigate('/browse')} // Redirect to Browse page
+            >
               Browse Services
             </button>
-            <button className="home-button" onClick={() => navigate('/book')}>
+            <button 
+              className="home-button" 
+              onClick={() => navigate('/book')} // Redirect to Book page
+            >
               Book A Service
             </button>
-            <button className="home-button" onClick={() => navigate('/health')}>
+            <button 
+              className="home-button" 
+              onClick={() => navigate('/health')} // Redirect to Health page
+            >
               Record Pet Health
             </button>
           </div>
