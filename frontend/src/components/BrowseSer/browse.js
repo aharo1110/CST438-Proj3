@@ -75,7 +75,7 @@ const BrowseSer = () => {
                     </p>
                     <button
                       className="book-button"
-                      onClick={() => handleBookService(option.id)}
+                      onClick={() => handleBookService(option.service_id)}
                     >
                       Book Now
                     </button>
