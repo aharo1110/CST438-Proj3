@@ -1,5 +1,7 @@
 services:
   backend:
+    env_file:
+      - .env
     build:
       args:
       - NODE_ENV=development
@@ -12,6 +14,9 @@ services:
       - DATABASE_PASSWORD=/run/secrets/db-password
       - DATABASE_HOST=db
       - NODE_ENV=development
+      # - GOOGLE_CLIENT_ID=496413801232-l6mitcluf383rqaao053r2tsm5rdb10.apps.googleusercontent.com
+      # - GOOGLE_CLIENT_SECRET=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
+      # - GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
     ports:
       - 80:80
       - 9229:9229

@@ -1,7 +1,12 @@
 {
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.456.0",
     "react-datepicker": "^7.5.0",
     "react-router-dom": "^6.27.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

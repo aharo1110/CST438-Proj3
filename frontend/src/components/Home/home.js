@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../Layout'
-import { jwtDecode } from 'jwt-decode';
+import Layout from '../../Layout';
+import {jwtDecode} from 'jwt-decode'; // Removed incorrect destructuring
 import '../../css/home.css';
 import image from '../../images/FURCARE_logo.jpeg';
 
 function Home() {
   const [appointments, setAppointments] = useState([]);
-  const [newAppointment, setNewAppointment] = useState("");
+  const [newAppointment, setNewAppointment] = useState('');
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
-    if(!localStorage.getItem('userInfo')) {
+    if (!localStorage.getItem('userInfo')) {
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get('token');
       if (!token) {
         navigate('/');
+        return;
       }
 
       const decoded = jwtDecode(token);
@@ -28,62 +29,44 @@ function Home() {
     }
   }, [navigate]);
 
-  // Handler for deleting an appointment
   const handleDelete = (id) => {
     setAppointments(appointments.filter((appointment) => appointment.id !== id));
   };
 
-  // Handler for adding a new appointment
   const handleAdd = () => {
     if (newAppointment.trim()) {
-      const newId = appointments.length > 0 ? appointments[appointments.length - 1].id + 1 : 1;
+      const newId =
+        appointments.length > 0 ? appointments[appointments.length - 1].id + 1 : 1;
       setAppointments([...appointments, { id: newId, text: newAppointment }]);
-      setNewAppointment(""); // Clear input field
+      setNewAppointment('');
     }
   };
-  
+
   return (
-    <div className = "App">
-    <div className="home-container">
-      <Layout />
-
-      <div className="main-content">
-        <header className="home-header">
-          <h1>Welcome to FurCare</h1>
-        </header>
-
-        <div className="home-buttons">
-          <button onClick={() => navigate('/health')} className="home-button">My Pets</button>
-          <button onClick={() => navigate('/services')} className="home-button">Browse Services</button>
-          <button onClick={() => navigate('/location')} className="home-button">Book A Service</button>
-        </div>
+    <div className="App">
+      <div className="home-container">
+        <Layout />
 
         <div className="main-content">
           <header className="home-header">
             <h1>Welcome to FurCare</h1>
           </header>
+
           <div className="logo-container">
             <img src={image} alt="FurCare Logo" className="logo-image" />
           </div>
 
           <div className="home-buttons">
-            <button className="home-button">My Pets</button>
-            <button 
-              className="home-button" 
-              onClick={() => navigate('/browse')} // Redirect to Browse page
-            >
+            <button onClick={() => navigate('/health')} className="home-button">
+              My Pets
+            </button>
+            <button onClick={() => navigate('/services')} className="home-button">
               Browse Services
             </button>
-            <button 
-              className="home-button" 
-              onClick={() => navigate('/book')} // Redirect to Book page
-            >
+            <button onClick={() => navigate('/location')} className="home-button">
               Book A Service
             </button>
-            <button 
-              className="home-button" 
-              onClick={() => navigate('/health')} // Redirect to Health page
-            >
+            <button onClick={() => navigate('/health')} className="home-button">
               Record Pet Health
             </button>
           </div>

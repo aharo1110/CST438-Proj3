@@ -1,6 +1,5 @@
 // simple node web server that displays hello world
 // optimized for Docker image
-
 const express = require("express");
 // this example uses express web framework so we know what longer build times
 // do and how Dockerfile layer ordering matters. If you mess up Dockerfile ordering
