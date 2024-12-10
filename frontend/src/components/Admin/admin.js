@@ -76,6 +76,7 @@ function Admin() {
                   value={serviceName}
                   onChange={(e) => setServiceName(e.target.value)}
                   className="admin-input"
+                  maxlength="60"
                   required
                 />
                 <textarea
@@ -83,35 +84,44 @@ function Admin() {
                   value={serviceDescription}
                   onChange={(e) => setServiceDescription(e.target.value)}
                   className="admin-textarea"
+                  maxlength="255"
                   required
                 />
                 <div>
-                  <textarea
+                  <input
                     placeholder="Address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     className="admin-textarea"
+                    maxlength="60"
+                    size="30"
                     required
                   />
-                  <textarea
+                  <input
                     placeholder="City"
                     value={address}
                     onChange={(e) => setCity(e.target.value)}
                     className="admin-textarea"
+                    maxlength="60"
+                    size="20"
                     required
                   />
-                  <textarea
+                  <input
                     placeholder="State"
                     value={address}
                     onChange={(e) => setState(e.target.value)}
                     className="admin-textarea"
+                    maxlength="2"
+                    size="2"
                     required
                   />
-                  <textarea
+                  <input
                     placeholder="Zip"
                     value={address}
                     onChange={(e) => setZip(e.target.value)}
                     className="admin-textarea"
+                    maxlength="10"
+                    size="10"
                     required
                   />
                 </div>
