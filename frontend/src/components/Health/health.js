@@ -14,6 +14,9 @@ function Health() {
     phone: '',
   });
 
+  // New state for pet image
+  const [petImage, setPetImage] = useState(null);
+
   const [vaccinationRecords, setVaccinationRecords] = useState([]);
   const [newRecord, setNewRecord] = useState({ date: '', type: '' });
   const [showAddVaccinationForm, setShowAddVaccinationForm] = useState(false);
@@ -22,11 +25,32 @@ function Health() {
   const [newAllergy, setNewAllergy] = useState('');
   const [showAddAllergyForm, setShowAddAllergyForm] = useState(false);
 
+  // New function to handle image upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPetImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'phone') {
-      // Only allow numeric input for the phone field
-      if (!isNaN(value) || value === '') {
+  
+    if (name === 'doctorName') {
+      // Allow only alphabetical input for the doctor's name
+      if (/^[a-zA-Z\s]*$/.test(value) || value === '') {
+        setPetDetails((prevDetails) => ({
+          ...prevDetails,
+          [name]: value,
+        }));
+      }
+    } else if (name === 'phone') {
+      // Allow only numeric input for the phone field
+      if (/^\d*$/.test(value)) {
         setPetDetails((prevDetails) => ({
           ...prevDetails,
           [name]: value,
@@ -81,29 +105,60 @@ function Health() {
   return (
     <div className="App">
       <button
-          className="health-home"
-          onClick={() => navigate('/home')} // Navigate to the home page
-        >
-          Home
-        </button>
+        className="health-home"
+        onClick={() => navigate('/home')}
+      >
+        Home
+      </button>
       
+      {/* New Image Upload Section */}
+      <div className="pet-image-upload">
+        <input 
+          type="file" 
+          accept="image/*" 
+          onChange={handleImageUpload} 
+          id="pet-image-input"
+          style={{ display: 'none' }}
+        />
+        <label htmlFor="pet-image-input" className="image-upload-label">
+          {petImage ? (
+            <img 
+              src={petImage} 
+              alt="Pet" 
+              className="pet-image-preview"
+              style={{ 
+                width: '200px', 
+                height: '200px', 
+                objectFit: 'cover', 
+                borderRadius: '50%',
+                cursor: 'pointer'
+              }}
+            />
+          ) : (
+            <div className="image-placeholder">
+              Click to Upload Pet Image
+            </div>
+          )}
+        </label>
+      </div>
+
       <div className="header">
         <div className="contact-info">
-          <input
-            type="text"
-            name="doctorName"
-            value={petDetails.doctorName}
-            onChange={handleInputChange}
-            placeholder="Doctor's Name"
-          />
-          <input
-            type="tel"
-            name="phone"
-            value={petDetails.phone}
-            onChange={handleInputChange}
-            placeholder="Doctor's Number"
-          />
-        </div>
+             <input
+              type="text"
+              name="doctorName"
+              value={petDetails.doctorName}
+              onChange={handleInputChange}
+              placeholder="Doctor's Name"
+            />
+            <input
+              type="tel"
+              name="phone"
+              value={petDetails.phone}
+              onChange={handleInputChange}
+              placeholder="Doctor's Number"
+            />
+          </div>
       </div>
 
       <div className="content" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
