@@ -1,4 +1,12 @@
-
+.App {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(180deg, #77bdff 75%, #93c4a6 100%);
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
 .home-container {
     width: 100%;
     max-width: 1200px; 
