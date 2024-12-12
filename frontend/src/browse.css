@@ -17,6 +17,17 @@
     --text-color: #1f2937;
     --white: #ffffff;
   }
+  .browse-home {
+    background-color: #6db96d;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-right: 80rem;
+}
   
   .pet-services-container {
     max-width: 800px;

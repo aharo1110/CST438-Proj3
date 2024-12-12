@@ -207,6 +207,13 @@ app.get("/api/service", (req, res) => {
       .then((rows) => {
         res.status(200).json(rows);
       });
+    } else if(req.query.type) {
+      knex('services')
+        .select('*')
+        .where({ service_type: req.query.type })
+        .then((rows) => {
+          res.status(200).json(rows);
+        });
   } else {
     knex('services')
       .select('*')
@@ -234,7 +241,52 @@ app.post("/api/service", (req, res) => {
 });
 
 
-
+app.get("/api/appointment", (req, res) => {
+  if(req.query.id) {
+    knex('appointments')
+      .select('*')
+      .where({ appointment_id: req.query.id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else if(req.query.user_id) {
+    knex('appointments')
+      .select('*')
+      .where({ user_id: req.query.user_id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else if(req.query.pet_id) {
+    knex('appointments')
+      .select('*')
+      .where({ pet_id: req.query.pet_id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else if(req.query.service_id) {
+    knex('appointments')
+      .select('*')
+      .where({ service_id: req.query.service_id })
+      .then((rows) => {
+        res.status(200).json(rows);
+      });
+  } else {
+    res.status(400).json({ message: "Missing query parameter" });
+  }
+});
+app.post("/api/appointment", (req, res) => {
+  let {service_id, user_id, pet_id, appointment_date, appointment_time} = req.body;
+  knex('appointments').insert({
+    service_id: service_id,
+    user_id: user_id,
+    pet_id: pet_id,
+    appointment_date: appointment_date,
+    appointment_time: appointment_time
+  })
+  .then(() => {
+    res.status(200).json({ message: "Appointment added" });
+  });
+});
 // Health checks/System stuff
 
 app.get("/healthz", function(req, res) {

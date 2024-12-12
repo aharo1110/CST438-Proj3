@@ -5,7 +5,6 @@ import '../../browse.css';
 const BrowseSer = () => {
     const [activeService, setActiveService] = useState('walking');
     const navigate = useNavigate();
-  
     const services = {
       walking: {
         title: 'Pet Walking',
@@ -57,6 +56,12 @@ const BrowseSer = () => {
   
     return (
       <div className="App">
+        <button
+        className="browse-home"
+        onClick={() => navigate('/home')}
+      >
+        Home
+      </button>
         <div className="pet-services-container">
           <h1 className="pet-services-title">FurCare Services</h1>
   
