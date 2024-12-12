@@ -218,6 +218,17 @@ app.get("/api/user", (req, res) => {
   }
 });
 
+app.delete('/api/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    await knex('users').where('user_id', userId).del();
+    res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Failed to delete user.' });
+  }
+});
+
 app.get("/api/service", (req, res) => {
   if(req.query.id) {
     knex('services')
