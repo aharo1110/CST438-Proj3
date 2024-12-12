@@ -135,6 +135,26 @@ app.post("/api/auth/signup", async (req, res) => {
     }
 });
 
+app.post('/api/make-admin', async (req, res) => {
+  const { user_id } = req.body;
+
+  if (!user_id) {
+    return res.status(400).json({ error: 'User ID is required.' });
+  }
+
+  try {
+    await knex('users')
+      .where({ user_id: user_id })
+      .update({ is_admin: true });
+
+    res.status(200).json({ message: `User with ID ${user_id} is now an admin.` });
+  } catch (error) {
+    console.error('Error making user admin:', error);
+    res.status(500).json({ error: 'Failed to update user to admin.' });
+  }
+});
+
+
 app.post("/api/pet", (req, res) => {
   const {owner, name, type, breed, sex, dob} = req.body;
   // Maybe check if owner exists?
@@ -216,7 +236,7 @@ app.get("/api/service", (req, res) => {
 });
 
 app.post("/api/service", (req, res) => {
-  let {name, description, service_type, address, city, state, zip} = req.body;
+  let {name, description, service_type, address, city, state, zip,} = req.body;
   state = state.toUpperCase();
   knex('services').insert({
     name: name,
@@ -230,6 +250,57 @@ app.post("/api/service", (req, res) => {
   .then(() => {
     res.status(200).json({ message: "Service added" });
   });
+});
+
+app.post("/api/appointments", (req, res) => {
+  const { user_id, pet_id, service_id, appointment_date, appointment_time } = req.body;
+
+  if (!user_id || !pet_id || !service_id || !appointment_date || !appointment_time) {
+    return res.status(400).json({ error: "All fields are required." });
+  }
+  knex("appointments")
+    .insert({
+      user_id: user_id,
+      pet_id: pet_id,
+      service_id: service_id,
+      appointment_date: appointment_date,
+      appointment_time: appointment_time,
+    })
+    .then(([appointment_id]) => {
+      res.status(201).json({
+        message: "Appointment created successfully!",
+        appointment_id: appointment_id,
+      });
+    })
+    .catch((error) => {
+      console.error("Error creating appointment:", error);
+      res.status(500).json({ error: "Failed to create appointment. Please try again." });
+    });
+});
+
+app.get("/api/appointments/user/:userId", (req, res) => {
+  const { userId } = req.params;
+
+  knex("appointments")
+    .join("pets", "appointments.pet_id", "pets.pet_id")
+    .join("services", "appointments.service_id", "services.service_id")
+    .select(
+      "appointments.appointment_id",
+      "pets.name as pet_name",
+      "services.name as service_name",
+      "appointments.appointment_date",
+      "appointments.appointment_time"
+    )
+    .where("appointments.user_id", userId)
+    .andWhere("appointments.appointment_date", ">=", knex.fn.now()) // doesnt pass past appointments
+    .orderBy("appointments.appointment_date", "asc") // Sort by date
+    .then((appointments) => {
+      res.json(appointments);
+    })
+    .catch((error) => {
+      console.error("Error fetching appointments:", error);
+      res.status(500).json({ error: "Failed to fetch appointments" });
+    });
 });
 
 
