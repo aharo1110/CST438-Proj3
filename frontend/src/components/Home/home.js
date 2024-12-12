@@ -58,8 +58,7 @@ function Home() {
 
           <div className="home-buttons">
             <button className="home-button" onClick={() => navigate('/profile')}>My Profile</button>
-            <button className="home-button" onClick={() => navigate('/browse')}>Browse Services</button>
-            <button className="home-button" onClick={() => navigate('/location')}>Book A Service</button>
+            <button className="home-button" onClick={() => navigate('/browse')}>Browse/Book Services</button>
             <button className="home-button" onClick={() => navigate('/health')}>Record Pet Health</button>
           </div>
 
