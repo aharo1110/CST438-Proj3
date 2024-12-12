@@ -38,7 +38,20 @@ function Admin() {
     };
     fetchUsers();
   }, []);
-
+  const handleDeleteUser = async (userId) => {
+    const confirmDelete = window.confirm(
+      'Are you sure you want to delete this user? This action cannot be undone.'
+    );
+    if (!confirmDelete) return;
+    try {
+      await axios.delete(`http://localhost:80/api/user/${userId}`);
+      setUsers(users.filter((user) => user.user_id !== userId));
+      setMessage('User deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      setMessage('Failed to delete user. Please try again.');
+    }
+  };
   const handleAddService = async (e) => {
     e.preventDefault();
     try {
@@ -49,9 +62,7 @@ function Admin() {
         address: address,
         city: city,
         state: state,
-        zip: zip
-      }, {
-        withCredentials: true
+        zip: zip,
       });
       console.log('Service added:', response.data);
       setMessage(`Service "${serviceName}" added successfully as a "${serviceType}" service!`);
@@ -79,8 +90,16 @@ function Admin() {
             <div className="users-list">
               <h2>All Users</h2>
               <ul>
-                {users.map((user, index) => (
-                  <li key={index}>{user.username}</li>
+                {users.map((user) => (
+                  <li key={user.user_id}>
+                    {user.username}{' '}
+                    <button
+                      className="delete-user-button"
+                      onClick={() => handleDeleteUser(user.user_id)}
+                    >
+                      Delete
+                    </button>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -160,8 +179,8 @@ function Admin() {
                   <option value="sitting">Pet Sitting</option>
                   <option value="healthcare">Pet Healthcare</option>
                 </select>
-                <br></br>
-                <br></br>
+                <br />
+                <br />
                 <button type="submit" className="admin-button">
                   Add Service
                 </button>
