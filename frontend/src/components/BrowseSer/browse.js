@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../../browse.css';
 
 const BrowseSer = () => {
-    const [activeService, setActiveService] = useState('walking');
-    const navigate = useNavigate();
+  const [activeService, setActiveService] = useState('walking');
+  const [serviceOptions, setServiceOptions] = useState({});
+  const navigate = useNavigate();
     const services = {
       walking: {
         title: 'Pet Walking',
@@ -46,12 +48,21 @@ const BrowseSer = () => {
   
     const handleServiceChange = (service) => {
       setActiveService(service);
+      fetchServiceDetails(service);
+    };
+    const fetchServiceDetails = async (service) => {
+      try {
+        const response = await axios.get(`http://localhost:80/api/service?type=${service}`);
+        setServiceOptions(response.data);
+        console.log(serviceOptions);
+      } catch (error) {
+        console.error('Error fetching service details:', error);
+      }
     };
   
     const handleBookService = (service) => {
       // Redirect the user to the booking page for the selected service
-      //const serviceRoute = service === 'walking' ? 'petsitting' : service;
-      navigate(`/book/`);
+      navigate(`/book?service=${service}`);
     };
   
     return (

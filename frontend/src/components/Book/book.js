@@ -6,7 +6,6 @@ import image from '../../images/FURCARE_logo.jpeg';
 
 function Book() {
   const navigate = useNavigate();
-
   const [message, setMessage] = useState(''); // State to handle the booking message
   const handleBooking = (service) => {
     setMessage(`Your appointment for ${service} has been booked`);
@@ -53,7 +52,7 @@ function Book() {
         </div>
       </div>
     </div>
-    </div>
+  </div>
   );
 }
 
