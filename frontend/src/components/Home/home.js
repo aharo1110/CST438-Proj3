@@ -72,6 +72,7 @@ function Home() {
                   <li key={appointment.appointment_id} className="appointment-item">
                     <div className="appointment-info">
                       <span className="pet-name">Pet: {appointment.pet_name}</span>
+                      <br></br>
                       <span className="service-name">Service: {appointment.service_name}</span>
                     </div>
                     <div className="appointment-date-time">
