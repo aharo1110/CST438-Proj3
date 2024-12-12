@@ -58,6 +58,7 @@ const BrowseSer = () => {
     return (
       <div className="App">
         <div className="pet-services-container">
+          <Layout />
           <h1 className="pet-services-title">FurCare Services</h1>
   
           <div className="service-navigation">

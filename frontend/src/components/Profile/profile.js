@@ -16,6 +16,7 @@ function Profile() {
     sex: '',
     dob: '',
   });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (!localStorage.getItem('userInfo')) {
@@ -45,7 +46,20 @@ function Profile() {
     }
   }, [navigate]);
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!newPet.name) newErrors.name = 'Pet name is required';
+    if (!newPet.type) newErrors.type = 'Pet type is required';
+    if (!newPet.breed) newErrors.breed = 'Breed is required';
+    if (!newPet.sex) newErrors.sex = 'Sex is required';
+    if (!newPet.dob) newErrors.dob = 'Date of birth is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleAddPet = async () => {
+    if (!validateForm()) return;
+
     try {
       const response = await axios.post('http://localhost:80/api/pet', {
         owner: userInfo.user_id,
@@ -58,14 +72,11 @@ function Profile() {
       setPets([...pets, response.data]);
       setShowAddPetModal(false);
       setNewPet({ name: '', type: '', breed: '', sex: '', dob: '' });
+      setErrors({});
     } catch (error) {
       console.error('Error adding pet:', error);
     }
   };
-
-  if (!userInfo) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="App">
@@ -100,7 +111,7 @@ function Profile() {
                 <h2>My Pets</h2>
                 <div className="pet-item">
                   {pets.map((pet) => (
-                    <div key={pet.id}>
+                    <div key={pet.pet_id}>
                       <b>{pet.name || 'Unnamed'}</b>
                       <br />
                       {pet.sex
@@ -120,52 +131,88 @@ function Profile() {
         </div>
 
         {showAddPetModal && (
-          <div className="add-pet-modal">
-            <div className="modal-content">
+          <div className="modal-background">
+            <div className="modal-card">
               <h2>Add a Pet</h2>
-              <input
-                type="text"
-                placeholder="Pet Name"
-                value={newPet.name}
-                onChange={(e) =>
-                  setNewPet((prev) => ({ ...prev, name: e.target.value }))
-                }
-              />
-              <input
-                type="text"
-                placeholder="Pet Type"
-                value={newPet.type}
-                onChange={(e) =>
-                  setNewPet((prev) => ({ ...prev, type: e.target.value }))
-                }
-              />
-              <input
-                type="text"
-                placeholder="Breed"
-                value={newPet.breed}
-                onChange={(e) =>
-                  setNewPet((prev) => ({ ...prev, breed: e.target.value }))
-                }
-              />
-              <select
-                value={newPet.sex}
-                onChange={(e) =>
-                  setNewPet((prev) => ({ ...prev, sex: e.target.value }))
-                }
-              >
-                <option value="">Select Sex</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-              <input
-                type="date"
-                value={newPet.dob}
-                onChange={(e) =>
-                  setNewPet((prev) => ({ ...prev, dob: e.target.value }))
-                }
-              />
-              <button onClick={handleAddPet}>Add Pet</button>
-              <button onClick={() => setShowAddPetModal(false)}>Cancel</button>
+              <form className="add-pet-form">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Pet Name"
+                    value={newPet.name}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                    className={`input-field ${errors.name ? 'error' : ''}`}
+                  />
+                  {errors.name && <div className="error-message">{errors.name}</div>}
+                </div>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Pet Type"
+                    value={newPet.type}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({ ...prev, type: e.target.value }))
+                    }
+                    className={`input-field ${errors.type ? 'error' : ''}`}
+                  />
+                  {errors.type && <div className="error-message">{errors.type}</div>}
+                </div>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    placeholder="Breed"
+                    value={newPet.breed}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({ ...prev, breed: e.target.value }))
+                    }
+                    className={`input-field ${errors.breed ? 'error' : ''}`}
+                  />
+                  {errors.breed && <div className="error-message">{errors.breed}</div>}
+                </div>
+                <div className="form-group">
+                  <select
+                    value={newPet.sex}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({ ...prev, sex: e.target.value }))
+                    }
+                    className={`input-field ${errors.sex ? 'error' : ''}`}
+                  >
+                    <option value="">Select Sex</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                  {errors.sex && <div className="error-message">{errors.sex}</div>}
+                </div>
+                <div className="form-group">
+                  <input
+                    type="date"
+                    value={newPet.dob}
+                    onChange={(e) =>
+                      setNewPet((prev) => ({ ...prev, dob: e.target.value }))
+                    }
+                    className={`input-field ${errors.dob ? 'error' : ''}`}
+                  />
+                  {errors.dob && <div className="error-message">{errors.dob}</div>}
+                </div>
+                <div className="form-buttons">
+                  <button
+                    type="button"
+                    className="modal-button"
+                    onClick={handleAddPet}
+                  >
+                    Add Pet
+                  </button>
+                  <button
+                    type="button"
+                    className="modal-button cancel-button"
+                    onClick={() => setShowAddPetModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
