@@ -199,6 +199,23 @@ app.get("/api/user", (req, res) => {
   }
 });
 
+app.delete("/api/user/:user_id", async (req, res) => {
+  const { user_id } = req.params;
+
+  try {
+      // Remove pets first (to avoid foreign key constraints)
+      await knex('pets').where({ owner: user_id }).del();
+
+      // Remove the user
+      await knex('users').where({ user_id }).del();
+
+      res.status(200).json({ message: "User account deleted successfully." });
+  } catch (error) {
+      console.error('Error deleting user:', error);
+      res.status(500).json({ message: "Failed to delete user account. Please try again." });
+  }
+});
+
 app.get("/api/service", (req, res) => {
   if(req.query.id) {
     knex('services')
