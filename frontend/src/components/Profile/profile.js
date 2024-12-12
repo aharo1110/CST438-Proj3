@@ -41,6 +41,26 @@ function Profile() {
         return <div>Loading...</div>;
       }
 
+      const DeleteAcc = async () => {
+
+        const userConfirmed = window.confirm("Delete your account?");
+    if (!userConfirmed) return;
+        try {
+            const response = await axios.delete(`http://localhost:80/api/user/${userInfo.user_id}`);
+            if (response.status === 200) {
+                localStorage.removeItem('userInfo');
+                navigate('/');
+            }
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            alert('Error deleting account. Please try again later.');
+        }
+    };
+
+    if (!userInfo) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className = "App">
         <div className="profile-container">
@@ -58,6 +78,7 @@ function Profile() {
                         </div>
                         <div className="profile-buttons">
                             <button className="profile-button">Add Pet</button>
+                            <button className="profile-button" onClick={DeleteAcc}>Delete Account</button>
                         </div>
                         
                     </div>
