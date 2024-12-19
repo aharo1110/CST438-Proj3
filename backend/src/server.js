@@ -136,6 +136,26 @@ app.post("/api/auth/signup", async (req, res) => {
     }
 });
 
+app.post('/api/make-admin', async (req, res) => {
+  const { user_id } = req.body;
+
+  if (!user_id) {
+    return res.status(400).json({ error: 'User ID is required.' });
+  }
+
+  try {
+    await knex('users')
+      .where({ user_id: user_id })
+      .update({ is_admin: true });
+
+    res.status(200).json({ message: `User with ID ${user_id} is now an admin.` });
+  } catch (error) {
+    console.error('Error making user admin:', error);
+    res.status(500).json({ error: 'Failed to update user to admin.' });
+  }
+});
+
+
 app.post("/api/pet", (req, res) => {
   const {owner, name, type, breed, sex, dob} = req.body;
   // Maybe check if owner exists?
@@ -199,6 +219,17 @@ app.get("/api/user", (req, res) => {
   }
 });
 
+app.delete('/api/user/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    await knex('users').where('user_id', userId).del();
+    res.status(200).json({ message: 'User deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Failed to delete user.' });
+  }
+});
+
 app.get("/api/service", (req, res) => {
   if(req.query.id) {
     knex('services')
@@ -207,13 +238,13 @@ app.get("/api/service", (req, res) => {
       .then((rows) => {
         res.status(200).json(rows);
       });
-  } else if(req.query.type) {
-    knex('services')
-      .select('*')
-      .where({ service_type: req.query.type })
-      .then((rows) => {
-        res.status(200).json(rows);
-      });
+    } else if(req.query.type) {
+      knex('services')
+        .select('*')
+        .where({ service_type: req.query.type })
+        .then((rows) => {
+          res.status(200).json(rows);
+        });
   } else {
     knex('services')
       .select('*')
@@ -224,7 +255,7 @@ app.get("/api/service", (req, res) => {
 });
 
 app.post("/api/service", (req, res) => {
-  let {name, description, service_type, address, city, state, zip} = req.body;
+  let {name, description, service_type, address, city, state, zip,} = req.body;
   state = state.toUpperCase();
   knex('services').insert({
     name: name,
@@ -240,52 +271,50 @@ app.post("/api/service", (req, res) => {
   });
 });
 
-app.get("/api/appointment", (req, res) => {
-  if(req.query.id) {
-    knex('appointments')
-      .select('*')
-      .where({ appointment_id: req.query.id })
-      .then((rows) => {
-        res.status(200).json(rows);
-      });
-  } else if(req.query.user_id) {
-    knex('appointments')
-      .select('*')
-      .where({ user_id: req.query.user_id })
-      .then((rows) => {
-        res.status(200).json(rows);
-      });
-  } else if(req.query.pet_id) {
-    knex('appointments')
-      .select('*')
-      .where({ pet_id: req.query.pet_id })
-      .then((rows) => {
-        res.status(200).json(rows);
-      });
-  } else if(req.query.service_id) {
-    knex('appointments')
-      .select('*')
-      .where({ service_id: req.query.service_id })
-      .then((rows) => {
-        res.status(200).json(rows);
-      });
-  } else {
-    res.status(400).json({ message: "Missing query parameter" });
+app.post("/api/appointments", (req, res) => {
+  const { user_id, pet_id, service_id, appointment_date, appointment_time } = req.body;
+
+  if (!user_id || !pet_id || !service_id || !appointment_date || !appointment_time) {
+    return res.status(400).json({ error: "All fields are required." });
   }
+  knex("appointments")
+    .insert({
+      user_id: user_id,
+      pet_id: pet_id,
+      service_id: service_id,
+      appointment_date: appointment_date,
+      appointment_time: appointment_time,
+    })
+    .then(([appointment_id]) => {
+      res.status(201).json({
+        message: "Appointment created successfully!",
+        appointment_id: appointment_id,
+      });
+    })
+    .catch((error) => {
+      console.error("Error creating appointment:", error);
+      res.status(500).json({ error: "Failed to create appointment. Please try again." });
+    });
 });
 
-app.post("/api/appointment", (req, res) => {
-  let {service_id, user_id, pet_id, appointment_date, appointment_time} = req.body;
-  knex('appointments').insert({
-    service_id: service_id,
-    user_id: user_id,
-    pet_id: pet_id,
-    appointment_date: appointment_date,
-    appointment_time: appointment_time
-  })
-  .then(() => {
-    res.status(200).json({ message: "Appointment added" });
-  });
+app.get("/api/appointments", (req, res) => {
+  const { userId } = req.query.user_id;
+
+  knex
+    .select('appointments.appointment_id', 'pets.name', 'services.name', 'appointments.appointment_date', 'appointments.appointment_time')
+    .from("appointments")
+    .join("pets", {"appointments.pet_id": "pets.pet_id"})
+    .join("services", {"appointments.service_id": "services.service_id"})
+    .where({ "appointments.user_id": userId })
+    .andWhere("appointments.appointment_date", ">=", knex.fn.now()) // doesnt pass past appointments
+    .orderBy("appointments.appointment_date", "asc") // Sort by date
+    .then((appointments) => {
+      res.json(appointments);
+    })
+    .catch((error) => {
+      console.error("Error fetching appointments:", error);
+      res.status(500).json({ error: "Failed to fetch appointments" });
+    });
 });
 
 

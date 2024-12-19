@@ -193,7 +193,7 @@ function Health() {
             <div className="info-card">
               <div className="info-label">Last weight check</div>
               <div className="info-value">
-                <span className="icon">⚖️</span>
+                <span className="icon">⚖️ kg</span>
                 <input
                   type="text"
                   name="lastWeightCheck"
